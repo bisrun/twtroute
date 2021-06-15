@@ -1,0 +1,9 @@
+#twt
+twt.maxProcessTime=20
+twt.serverIpOSRM=192.168.6.45
+twt.serverPortOSRM=20000
+
+#log color enabled
+spring.output.ansi.enabled=always
+#curl -I -k --http2 https://localhost:8443/hello
+
