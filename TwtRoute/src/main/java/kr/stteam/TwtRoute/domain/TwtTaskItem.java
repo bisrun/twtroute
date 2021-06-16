@@ -1,4 +1,4 @@
-package kr.stteam.TwtRoute.service;
+package kr.stteam.TwtRoute.domain;
 
 
 public class TwtTaskItem {

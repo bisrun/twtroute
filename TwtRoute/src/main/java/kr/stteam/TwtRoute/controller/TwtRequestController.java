@@ -3,7 +3,7 @@ package kr.stteam.TwtRoute.controller;
 import kr.stteam.TwtRoute.protocol.TwtRequestParam_BaseData;
 import kr.stteam.TwtRoute.protocol.TwtRequestParam_ServiceItem;
 import kr.stteam.TwtRoute.protocol.TwtResponseParam_Base;
-import kr.stteam.TwtRoute.service.TwtTaskItem;
+import kr.stteam.TwtRoute.domain.TwtTaskItem;
 import kr.stteam.TwtRoute.service.TwtService;
 import kr.stteam.TwtRoute.util.UtilCommon;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,6 @@ public class TwtRequestController {
         ArrayList<TwtTaskItem> tasklist = new ArrayList<TwtTaskItem>();
         setJobList(tasklist, request);
         TwtResponseParam_Base result = twtService.procTwt(tasklist, request);
-
         return result ;
     }
 
@@ -57,9 +56,7 @@ public class TwtRequestController {
                 task.tw_req_end =  UtilCommon.convHMtoSec(item.getTimewindow().get(1));
                 task.tw_req = 1;
             }
-
             tasklist.add(task);
-
             index ++ ;
 
         }

@@ -17,7 +17,9 @@ import com.graphhopper.jsprit.core.reporting.SolutionPrinter;
 import com.graphhopper.jsprit.core.util.*;
 //import com.graphhopper.jsprit.core.problem.job.Service;
 
+import kr.stteam.TwtRoute.AppProperties;
 import kr.stteam.TwtRoute.controller.TwtResult;
+import kr.stteam.TwtRoute.domain.TwtTaskItem;
 import kr.stteam.TwtRoute.protocol.*;
 import kr.stteam.TwtRoute.util.UtilCommon;
 import org.apache.http.client.ResponseHandler;
@@ -28,6 +30,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -37,7 +40,8 @@ import java.util.*;
 @Service
 public class TwtService {
     private static Logger logger = LoggerFactory.getLogger(TwtService.class);
-
+    private AppProperties appProperties;
+    private RouteProc routeProc = null;
 
     //List<TwtJobItem> joblist = new ArrayList<TwtJobItem>();
     //List<TwtTaskItem> routeResultList = new ArrayList<TwtTaskItem>();
@@ -47,6 +51,12 @@ public class TwtService {
     String VER_524_PORTNO = new String("20000");
     String hostname = new String("192.168.6.45:20000");
     private TwtTaskItem.taskitem_type jobitem_type;
+
+    @Autowired
+    public TwtService(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
+
     //String hostname = new String("192.168.6.45:5400");
 
     public TwtResponseParam_Base procTwt(ArrayList<TwtTaskItem> tasklist, TwtRequestParam_BaseData reqParam) {
@@ -54,13 +64,13 @@ public class TwtService {
 
         double tmtag_start = System.currentTimeMillis();
         FastVehicleRoutingTransportCostsMatrix costMatrixBuilder = null;
+        TwtResult twtResult = TwtResult.create(reqParam);
 
-        OsrmTripMatrixResponseParam tripMatrix = requestRouteTable(tasklist);
+        OsrmTripMatrixResponseParam tripMatrix = requestRouteTable(tasklist, twtResult);
         if (tripMatrix == null) {
             return null;
         }
-        tripMatrix.setTaskCount(tasklist.size());
-
+        //tripMatrix.setTaskCount(tasklist.size());
 
         try {
             costMatrixBuilder = createMatrix(tripMatrix);
@@ -145,8 +155,8 @@ public class TwtService {
          * get the best
          */
         VehicleRoutingProblemSolution bestSolution = Solutions.bestOf(solutions);
-        TwtResult twtResult = TwtResult.create(reqParam);
-        twtResult.setResultParam(new ArrayList<TwtTaskItem>(), problem, bestSolution, tripMatrix);
+
+        twtResult.setResultParam( problem, bestSolution);
 
 
         TwtResponseParam_Base response = MakeTwtResult(twtResult);
@@ -189,7 +199,7 @@ public class TwtService {
      * @param joblist
      * @return
      */
-    private OsrmTripMatrixResponseParam requestRouteTable(List<TwtTaskItem> joblist) {
+    private OsrmTripMatrixResponseParam requestRouteTable(List<TwtTaskItem> joblist, TwtResult twtResult) {
         StringBuffer buffer = new StringBuffer();
 
         logger.debug("requestRouteTable");
@@ -197,7 +207,6 @@ public class TwtService {
         stopWatch.start();
 
         int task_count = 0;
-
         // table 구할때는 , 출/목 포함해야한다.
         for (TwtTaskItem job_n : joblist) {
             if (task_count > 0) {
@@ -208,11 +217,23 @@ public class TwtService {
             task_count++;
         }
 
-        OsrmTripMatrixResponseParam tripMatrix = getTripMatrix(buffer);
+        // osrm 서버 요청.
+        twtResult.setRouteProcess(RouteProcOSRM.create(appProperties));
+        String responseJson = twtResult.getRouteProcess().requestTripMatrix(buffer);
+        twtResult.getRouteProcess().setTripMatrixInResult(responseJson, twtResult);
+        OsrmTripMatrixResponseParam tripMatrix =twtResult.getTripMatrix();
 
+        PrintTripMatrix( tripMatrix );
+
+        stopWatch.stop();
+        logger.debug("pre-processing comp-time: {}", stopWatch);
+
+        return tripMatrix;
+    }
+
+    private void PrintTripMatrix(OsrmTripMatrixResponseParam tripMatrix) {
         StringBuffer costs = new StringBuffer();
         int row = 0;
-
         for (double[] ar : tripMatrix.getDurations()) {
 
             costs.append(String.format("[%d] ", row));
@@ -221,72 +242,21 @@ public class TwtService {
                 costs.append(String.format("%.1f, ", ar[k]));
             }
             logger.info(costs.toString());
-            costs.setLength(0);
+            costs.setLength(0); // string buffer initialize
         }
-        stopWatch.stop();
-        logger.debug("pre-processing comp-time: {}", stopWatch);
-
-        return tripMatrix;
     }
 
-    private OsrmTripMatrixResponseParam getTripMatrix(StringBuffer jobPoint) {
-        OsrmTripMatrixResponseParam tripMatrix = null;
-        StringBuffer requestUrl = new StringBuffer("http://" + hostname + "/table/v1/car/");
-        requestUrl.append(jobPoint);
-        if (hostname.contains(VER_524_PORTNO)) // osrm 5.24
-        {
-            requestUrl.append("?annotations=distance,duration");
-        }
-        logger.info("url: " + requestUrl);
-
-        try {
-            HttpGet httpGet = new HttpGet(requestUrl.toString());
-            httpGet.setHeader("Accept", "application/json");
-
-            CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-            CloseableHttpResponse response = httpClient.execute(httpGet);
-
-            if (response.getStatusLine().getStatusCode() == 200) {
-
-                ObjectMapper mapper = new ObjectMapper();
-                ResponseHandler<String> handler = new BasicResponseHandler();
-                String body = handler.handleResponse(response);
-                tripMatrix = mapper.readValue(body, OsrmTripMatrixResponseParam.class);
-
-                if (tripMatrix.getDistances().size() == 0) {
-                    for (double[] ar : tripMatrix.getDurations()) {
-                        double[] arDist = ar.clone();
-                        tripMatrix.getDistances().add(arDist); // distance가 없어서,
-                    }
-                }
-
-                // TypeReference<List<BoardModel>> typeReference = new
-                // TypeReference<List<BoardModel>>(){};
-                // List<BoardModel> boardModelList = objectMapper.readValue(body,
-                // typeReference);
-                // BoardModel boardModel = objectMapper.readValue(body, BoardModel.class);
-                //logger.info("## res boardModel={}", body);
-                logger.info("---------ok-----------");
-            } else {
-                logger.info("response error");
-
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("fail to get osrm result !!!");
-            return null;
-        }
-
-        return tripMatrix;
-    }
 
     TwtResponseParam_Base MakeTwtResult(TwtResult twtResult) {
         try {
             twtResult.twtResponse = new TwtResponseParam_Base();
             setRouteResult(twtResult);
             setResultObject(twtResult);
-            setRouteGeometry(twtResult);
+
+            String responseJson = twtResult.getRouteProcess().requestRouteGeometry(twtResult);
+            twtResult.getRouteProcess().setRouteGeometryInResult(responseJson, twtResult);
+
+            //setRouteGeometry(twtResult);
             return twtResult.twtResponse;
 
         } catch (Exception e) {
@@ -470,6 +440,10 @@ public class TwtService {
         int tw_count = 0, tw_fail_count = 0;
         int visit_order = 0;
         TwtTaskItem task_rst = null;
+        OsrmTripMatrixResponseParam tripMatrix = twtResult.getTripMatrix();
+
+        ArrayList<TwtTaskItem> orderedTasklist = new ArrayList<TwtTaskItem>();
+
         for (VehicleRoute route : tripRouteList) {
             double costs = 0;
 
@@ -529,11 +503,11 @@ public class TwtService {
 
 
                 if (prevAct.getIndex() == -1) {
-                    task_rst.tbl_duration = twtResult.tripMatrix.getDurations().get(prevAct.getLocation().getIndex())[act.getIndex()];
-                    task_rst.tbl_distance = twtResult.tripMatrix.getDistances().get(prevAct.getLocation().getIndex())[act.getIndex()];
+                    task_rst.tbl_duration = tripMatrix.getDurations().get(prevAct.getLocation().getIndex())[act.getIndex()];
+                    task_rst.tbl_distance = tripMatrix.getDistances().get(prevAct.getLocation().getIndex())[act.getIndex()];
                 } else {
-                    task_rst.tbl_duration = twtResult.tripMatrix.getDurations().get(prevAct.getIndex())[act.getIndex()];
-                    task_rst.tbl_distance = twtResult.tripMatrix.getDistances().get(prevAct.getIndex())[act.getIndex()];
+                    task_rst.tbl_duration = tripMatrix.getDurations().get(prevAct.getIndex())[act.getIndex()];
+                    task_rst.tbl_distance = tripMatrix.getDistances().get(prevAct.getIndex())[act.getIndex()];
                 }
                 //job_rst.tw_req_start = problem.
 
@@ -564,16 +538,17 @@ public class TwtService {
 
             task_rst.sum_cost = costs;
             task_rst.last_cost = c;
-            task_rst.tbl_duration = twtResult.tripMatrix.getDurations().get(prevAct.getIndex())[route.getEnd().getLocation().getIndex()];
-            task_rst.tbl_distance = twtResult.tripMatrix.getDistances().get(prevAct.getIndex())[route.getEnd().getLocation().getIndex()];
+            task_rst.tbl_duration = tripMatrix.getDurations().get(prevAct.getIndex())[route.getEnd().getLocation().getIndex()];
+            task_rst.tbl_distance = tripMatrix.getDistances().get(prevAct.getIndex())[route.getEnd().getLocation().getIndex()];
             //job_rst.last_distance = ;
             task_rst.task_type = jobitem_type.job_end;
             task_rst.poi_name = twtResult.requestParam.getServices().get(task_rst.index).getName();
 
             visit_order++;
-            twtResult.tasklist.add(task_rst);
+            orderedTasklist.add(task_rst);
 
         }
+        twtResult.setTasklist(orderedTasklist);
 
 
         if (!twtResult.solution.getUnassignedJobs().isEmpty()) {
