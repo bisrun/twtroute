@@ -16,24 +16,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import scala.App;
 
 import java.util.ArrayList;
 
-
+@Service
 public class RouteProcOSRM implements RouteProc{
     private static Logger logger = LoggerFactory.getLogger(RouteProcOSRM.class);
     private AppProperties appProperties;
     final String OSRM_VER_524_PORTNO = new String("20000");
 
-
-
+    @Autowired
     public  RouteProcOSRM(AppProperties appProperties){
         this.appProperties = appProperties;
-    }
-
-    public static RouteProcOSRM create(AppProperties appProperties){
-        return new RouteProcOSRM(appProperties);
     }
 
     @Override

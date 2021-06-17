@@ -19,7 +19,7 @@ public class TwtResult {
 
 
     // tasklist는 방문순서로 ordering 되어 있음,
-    // request 할 때 tasklist와 다름. ordering 안되어 있음.
+    // request 할 때 tasklist와 다름
     public ArrayList<TwtTaskItem> tasklist = null;
 
     private OsrmTripMatrixResponseParam tripMatrix = null;
@@ -30,15 +30,15 @@ public class TwtResult {
     public TwtResponseParam_Base twtResponse;
     public String jsonResult;
 
-    RouteProc routeProcess;
+//    RouteProc routeProcess;
 
-    public RouteProc getRouteProcess() {
-        return routeProcess;
-    }
-
-    public void setRouteProcess(RouteProc routeProcess) {
-        this.routeProcess = routeProcess;
-    }
+//    public RouteProc getRouteProcess() {
+//        return routeProcess;
+//    }
+//
+//    public void setRouteProcess(RouteProc routeProcess) {
+//        this.routeProcess = routeProcess;
+//    }
 
     private TwtResult(TwtRequestParam_BaseData requestParam) {
         this.requestParam = requestParam;

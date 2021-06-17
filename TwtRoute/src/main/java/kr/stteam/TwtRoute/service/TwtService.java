@@ -40,8 +40,9 @@ import java.util.*;
 @Service
 public class TwtService {
     private static Logger logger = LoggerFactory.getLogger(TwtService.class);
+
     private AppProperties appProperties;
-    private RouteProc routeProc = null;
+    private RouteProc routeProc;
 
     //List<TwtJobItem> joblist = new ArrayList<TwtJobItem>();
     //List<TwtTaskItem> routeResultList = new ArrayList<TwtTaskItem>();
@@ -53,8 +54,9 @@ public class TwtService {
     private TwtTaskItem.taskitem_type jobitem_type;
 
     @Autowired
-    public TwtService(AppProperties appProperties) {
+    public TwtService(AppProperties appProperties, RouteProcOSRM routeProc) {
         this.appProperties = appProperties;
+        this.routeProc = routeProc;
     }
 
     //String hostname = new String("192.168.6.45:5400");
@@ -213,20 +215,20 @@ public class TwtService {
                 buffer.append(";");
             }
             buffer.append(String.format("%.7f,%.7f", job_n.x, job_n.y));
-
             task_count++;
         }
 
         // osrm 서버 요청.
-        twtResult.setRouteProcess(RouteProcOSRM.create(appProperties));
-        String responseJson = twtResult.getRouteProcess().requestTripMatrix(buffer);
-        twtResult.getRouteProcess().setTripMatrixInResult(responseJson, twtResult);
+        //twtResult.setRouteProcess(RouteProcOSRM.create(appProperties));
+        String responseJson = routeProc.requestTripMatrix(buffer);
+        routeProc.setTripMatrixInResult(responseJson, twtResult);
         OsrmTripMatrixResponseParam tripMatrix =twtResult.getTripMatrix();
 
         PrintTripMatrix( tripMatrix );
 
         stopWatch.stop();
         logger.debug("pre-processing comp-time: {}", stopWatch);
+        logger.debug("matrix json:"+responseJson);
 
         return tripMatrix;
     }
@@ -253,8 +255,8 @@ public class TwtService {
             setRouteResult(twtResult);
             setResultObject(twtResult);
 
-            String responseJson = twtResult.getRouteProcess().requestRouteGeometry(twtResult);
-            twtResult.getRouteProcess().setRouteGeometryInResult(responseJson, twtResult);
+            String responseJson = routeProc.requestRouteGeometry(twtResult);
+            routeProc.setRouteGeometryInResult(responseJson, twtResult);
 
             //setRouteGeometry(twtResult);
             return twtResult.twtResponse;
@@ -465,7 +467,7 @@ public class TwtService {
 
 
             visit_order++;
-            twtResult.tasklist.add(task_rst);
+            orderedTasklist.add(task_rst);
 
             for (TourActivity act : route.getActivities()) {
                 String jobId;
@@ -514,7 +516,7 @@ public class TwtService {
                 task_rst.task_type = jobitem_type.job_delivery;
                 task_rst.poi_name = twtResult.requestParam.getServices().get(task_rst.index).getName();
 
-                twtResult.tasklist.add(task_rst);
+                orderedTasklist.add(task_rst);
 
                 visit_order++;
                 prevAct = act;
