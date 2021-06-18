@@ -1,58 +1,53 @@
 package kr.stteam.TwtRoute.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.stteam.TwtRoute.AppProperties;
 import kr.stteam.TwtRoute.controller.TwtResult;
-import kr.stteam.TwtRoute.protocol.OsrmTripMatrixResponseParam;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.system.OutputCaptureExtension;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-@SpringBootTest
+//@SpringBootTest
 //@RestClientTest(RouteProcOSRM.class)
 //@ExtendWith(OutputCaptureExtension.class)
-@Disabled
-class RouteProcOSRMTest {
+//@AutoConfigureWebTestClient
+//@WebMvcTest(RouteProcOSRM.class)
 
-    @Autowired
-    AppProperties appProperties;
+@ExtendWith(SpringExtension.class)
+@EnableConfigurationProperties(value = AppProperties.class)
+@TestPropertySource("classpath:application.properties")
+class RouteProcOSRMTestMock {
+    private RouteProcOSRM routeProc;
 
-    //@Autowired
-   // private MockRestServiceServer server;
     @MockBean
     TwtResult mockTwtResult;
 
     @Autowired
-    private RouteProcOSRM routeProc;
+    //@MockBean
+    AppProperties appProperties;
 
     @BeforeEach
     public void beforeEach(){
+        routeProc =new RouteProcOSRM(appProperties);
     }
 
-    //@Test
+    @Test
     void requestTripMatrixTest() {
-
         //given
         // 맵퍼스->스포애니->송파역->석촌역->송파나루역->
         String viaPoint = "127.1145019,37.5086800;127.1121007,37.5098758;127.1078362,37.5053189;127.1128161,37.4993756;127.1162522,37.5078703";
 
         //when
+        //when(appProperties.getOsrmServerIpPort()).thenReturn("192.168.6.45:20000");
+        //when(appProperties.getOsrmServerPort()).thenReturn("20000");
+
         String responseJson = routeProc.requestTripMatrix(new StringBuffer(viaPoint));
 
         //then
@@ -77,6 +72,10 @@ class RouteProcOSRMTest {
 
         //when
         when(mockTwtResult.GetOrderedWaypoint()).thenReturn(viaPoint);
+        //when(appProperties.getOsrmServerIpPort()).thenReturn("192.168.6.45:20000");
+        //when(appProperties.getOsrmServerPort()).thenReturn("20000");
+
+
         String responseJson = routeProc.requestRouteGeometry(mockTwtResult);
 
         //then

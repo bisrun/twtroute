@@ -63,7 +63,6 @@ public class TwtService {
 
     public TwtResponseParam_Base procTwt(ArrayList<TwtTaskItem> tasklist, TwtRequestParam_BaseData reqParam) {
 
-
         double tmtag_start = System.currentTimeMillis();
         FastVehicleRoutingTransportCostsMatrix costMatrixBuilder = null;
         TwtResult twtResult = TwtResult.create(reqParam);
