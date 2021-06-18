@@ -44,11 +44,6 @@ public class TwtService {
     private AppProperties appProperties;
     private RouteProc routeProc;
 
-    //List<TwtJobItem> joblist = new ArrayList<TwtJobItem>();
-    //List<TwtTaskItem> routeResultList = new ArrayList<TwtTaskItem>();
-    //List<TwtTaskItem> jobUnassignedList = new ArrayList<TwtTaskItem>();
-
-
     String VER_524_PORTNO = new String("20000");
     String hostname = new String("192.168.6.45:20000");
     private TwtTaskItem.taskitem_type jobitem_type;
@@ -58,8 +53,6 @@ public class TwtService {
         this.appProperties = appProperties;
         this.routeProc = routeProc;
     }
-
-    //String hostname = new String("192.168.6.45:5400");
 
     public TwtResponseParam_Base procTwt(ArrayList<TwtTaskItem> tasklist, TwtRequestParam_BaseData reqParam) {
 
@@ -71,8 +64,6 @@ public class TwtService {
         if (tripMatrix == null) {
             return null;
         }
-        //tripMatrix.setTaskCount(tasklist.size());
-
         try {
             costMatrixBuilder = createMatrix(tripMatrix);
         } catch (Exception e) {
@@ -119,12 +110,13 @@ public class TwtService {
         vrpBuilder.setRoutingCost(costMatrixBuilder);
 
         Random random = RandomNumberGeneration.newInstance();
+
         for (TwtTaskItem job : tasklist) {
             if (job.index == 0) {
                 // 출발지, 목적지는 제외
             } else if (job.tw_req > 0) {
                 int rd = random.nextInt(10000);
-                com.graphhopper.jsprit.core.problem.job.Service service = com.graphhopper.jsprit.core.problem.job.Service.Builder.newInstance("TW-" + (job.task_id))
+                com.graphhopper.jsprit.core.problem.job.Service service = com.graphhopper.jsprit.core.problem.job.Service.Builder.newInstance( (job.task_id)+"TW-")
                     .addTimeWindow(job.tw_req_start, job.tw_req_end)
                     .addSizeDimension(0, 1)
                     .setServiceTime(job.tm_service)
@@ -133,7 +125,7 @@ public class TwtService {
                 vrpBuilder.addJob(service);
 
             } else {
-                com.graphhopper.jsprit.core.problem.job.Service service = com.graphhopper.jsprit.core.problem.job.Service.Builder.newInstance("NM-" + (job.task_id))
+                com.graphhopper.jsprit.core.problem.job.Service service = com.graphhopper.jsprit.core.problem.job.Service.Builder.newInstance((job.task_id)+"NM-")
                     .addSizeDimension(0, 1)
                     .setServiceTime(job.tm_service)
                     .setLocation(Location.Builder.newInstance().setIndex(job.index).setCoordinate(Coordinate.newInstance(job.x, job.y)).build())
@@ -292,92 +284,6 @@ public class TwtService {
         return viaPoints.toString();
     }
 
-    private String setRouteGeometry(TwtResult twtResult) {
-
-        String body = null;
-        StringBuffer requestUrl = new StringBuffer("http://" + hostname + "/route/v1/car/");
-        requestUrl.append(getDeliveryOrder(twtResult)); // 추후 변경해야함.
-        requestUrl.append("?geometries=geojson&overview=full");
-        // http://192.168.6.45:5500/route/v1/car/127.1162273,37.5168241;127.1143369,37.5088933;127.1015711,37.5138507?geometries=geojson
-
-        logger.info("url: " + requestUrl);
-
-        try {
-            HttpGet httpGet = new HttpGet(requestUrl.toString());
-            httpGet.setHeader("Accept", "application/json");
-
-            CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-            CloseableHttpResponse response = httpClient.execute(httpGet);
-
-            if (response.getStatusLine().getStatusCode() == 200) {
-                ObjectMapper mapper = new ObjectMapper();
-                ResponseHandler<String> handler = new BasicResponseHandler();
-                body = handler.handleResponse(response);
-                twtResult.osrmRouteResponse = mapper.readValue(body, OsrmRouteResponseParam_Base.class);
-                setGeometryOnResult(twtResult);
-
-
-                //tripMatrix = mapper.readValue(body, TripResultMatrixOSRM.class);
-                // TypeReference<List<BoardModel>> typeReference = new
-                // TypeReference<List<BoardModel>>(){};
-                // List<BoardModel> boardModelList = objectMapper.readValue(body,
-                // typeReference);
-                // BoardModel boardModel = objectMapper.readValue(body, BoardModel.class);
-                //logger.info("## res boardModel={}", body);
-                logger.info("---------ok-----------");
-            } else {
-                logger.info("response error");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("fail to get osrm result !!!");
-            return null;
-        }
-
-        return body;
-    }
-
-    private boolean setGeometryOnResult(TwtResult twtResult) {
-        int waypoint_idx = 0;
-        int prev_waypoint_idx = 0;
-        ArrayList<double[]> coordinates = twtResult.osrmRouteResponse.getRoutes().get(0).getGeometry().getCoordinates();
-        ArrayList<OsrmRouteResponseParam_Waypoint> waypoints = twtResult.osrmRouteResponse.getWaypoints();
-
-
-        for (int vtx_loop = 0; vtx_loop < coordinates.size(); vtx_loop++) {
-            if (coordinates.get(vtx_loop)[0] == waypoints.get(waypoint_idx).getLocation()[0] &&
-                coordinates.get(vtx_loop)[1] == waypoints.get(waypoint_idx).getLocation()[1] ) {
-                waypoints.get(waypoint_idx).setStart_coord_idx(prev_waypoint_idx);
-                waypoints.get(waypoint_idx).setCoord_count(vtx_loop - prev_waypoint_idx);
-                prev_waypoint_idx = vtx_loop;
-                waypoint_idx++;
-            }
-        }
-        int route_order = -1;
-        int vtx_index = 0;
-
-        for (OsrmRouteResponseParam_Waypoint wp : waypoints) {
-            route_order++;
-            if (wp.getCoord_count() < 1) {
-                continue;
-            }
-
-            ArrayList<double[]> linecoords = new ArrayList<double[]>();
-            for (int vtx_loop1 = 0; vtx_loop1 <= wp.getCoord_count() ; vtx_loop1++) {
-                vtx_index = vtx_loop1 + wp.getStart_coord_idx();
-
-                //double[] coordnate = new double[]{coordinates.get(vtx_index)[0],coordinates.get(vtx_index)[1]};
-                linecoords.add(coordinates.get(vtx_index));
-            }
-
-            TripGeometry geometry = new TripGeometry();
-            ArrayList<TwtResponseParam_RouteActivite> activities = twtResult.twtResponse.getSolution().getRoutes().get(0).getActivities();
-
-            geometry.setCoordinates(linecoords);
-            activities.get(route_order).setGeometry(geometry);
-        }
-        return true;
-    }
 
     private TwtResponseParam_Base setResultObject(TwtResult twtResult) {
 

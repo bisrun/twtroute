@@ -2,6 +2,7 @@ package kr.stteam.TwtRoute.service;
 
 import kr.stteam.TwtRoute.AppProperties;
 import kr.stteam.TwtRoute.controller.TwtResult;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,7 @@ class RouteProcOSRMTestMock {
     //@MockBean
     AppProperties appProperties;
 
+
     @BeforeEach
     public void beforeEach(){
         routeProc =new RouteProcOSRM(appProperties);
@@ -45,9 +47,6 @@ class RouteProcOSRMTestMock {
         String viaPoint = "127.1145019,37.5086800;127.1121007,37.5098758;127.1078362,37.5053189;127.1128161,37.4993756;127.1162522,37.5078703";
 
         //when
-        //when(appProperties.getOsrmServerIpPort()).thenReturn("192.168.6.45:20000");
-        //when(appProperties.getOsrmServerPort()).thenReturn("20000");
-
         String responseJson = routeProc.requestTripMatrix(new StringBuffer(viaPoint));
 
         //then
@@ -72,10 +71,6 @@ class RouteProcOSRMTestMock {
 
         //when
         when(mockTwtResult.GetOrderedWaypoint()).thenReturn(viaPoint);
-        //when(appProperties.getOsrmServerIpPort()).thenReturn("192.168.6.45:20000");
-        //when(appProperties.getOsrmServerPort()).thenReturn("20000");
-
-
         String responseJson = routeProc.requestRouteGeometry(mockTwtResult);
 
         //then

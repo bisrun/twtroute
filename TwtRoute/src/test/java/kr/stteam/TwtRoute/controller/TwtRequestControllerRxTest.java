@@ -48,7 +48,7 @@ class TwtRequestControllerRxTest {
         //given
         ClassPathResource inputResource = new ClassPathResource("/json/vv04_simple_no_tw.json");
         InputStream inputStream = inputResource.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))  ;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"))  ;
         String inputJson = reader.lines().collect(Collectors.joining("\n"));
 
         //when
