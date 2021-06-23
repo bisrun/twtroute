@@ -48,6 +48,9 @@ public final class InsertionInitialSolutionFactory implements InitialSolutionFac
         this.solutionCostsCalculator = solutionCostCalculator;
     }
 
+    /* algorithm에 대해 각각 solution 을 만들어 놓는다.
+     * 이것은 템플릿 처럼 사용된다. 추후 이 solution을 deep copy하여 사용한다. 원본은 유지
+     */
     @Override
     public VehicleRoutingProblemSolution createSolution(final VehicleRoutingProblem vrp) {
         logger.info("create initial solution");

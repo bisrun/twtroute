@@ -123,8 +123,10 @@ public class SearchStrategy {
     /**
      * Runs the search-strategy and its according modules, and returns DiscoveredSolution.
      * <p>
-     * <p>This involves three basic steps: 1) Selecting a solution from solutions (input parameter) according to {@link com.graphhopper.jsprit.core.algorithm.selector.SolutionSelector}, 2) running the modules
-     * ({@link SearchStrategyModule}) on the selectedSolution and 3) accepting the new solution according to {@link com.graphhopper.jsprit.core.algorithm.acceptor.SolutionAcceptor}.
+     * <p>This involves three basic steps: 
+     * <p> 1) Selecting a solution from solutions (input parameter) according to {@link com.graphhopper.jsprit.core.algorithm.selector.SolutionSelector}, 
+     * <p> 2) running the modules ({@link SearchStrategyModule}) on the selectedSolution and 
+     * <p> 3) accepting the new solution according to {@link com.graphhopper.jsprit.core.algorithm.acceptor.SolutionAcceptor}.
      * <p> Note that after 1) the selected solution is copied, thus the original solution is not modified.
      * <p> Note also that 3) modifies the input parameter solutions by adding, removing, replacing the existing solutions or whatever is defined in the solutionAcceptor.
      *
@@ -160,6 +162,9 @@ public class SearchStrategy {
         logger.debug("module added [module={}][#modules={}]", module, searchStrategyModules.size());
     }
 
+    // searchStrategyModules 에 listener 등록
+    // ex: SearchStrategyModule의 예로 RuinAndRecreateModule 같은 것이 있다.
+    //     listner 로 stateManager
     public void addModuleListener(SearchStrategyModuleListener moduleListener) {
         for (SearchStrategyModule module : searchStrategyModules) {
             module.addModuleListener(moduleListener);

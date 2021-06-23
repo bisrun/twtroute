@@ -34,6 +34,13 @@ class JobCalculatorSwitcher implements JobInsertionCostsCalculator {
         calcMap.put(jobClass, jic);
     }
 
+    /*
+     * 
+     * [by hsb]
+     * VehicleTypeDependentJobInsertionCalculator.getInsertionData 에서 호출함
+     */
+    
+    
     public InsertionData getInsertionData(VehicleRoute currentRoute, Job jobToInsert, Vehicle newVehicle, double newVehicleDepartureTime, Driver newDriver, double bestKnownScore) {
         JobInsertionCostsCalculator jic = calcMap.get(jobToInsert.getClass());
         if (jic == null) throw new IllegalStateException("cannot find calculator for " + jobToInsert.getClass());

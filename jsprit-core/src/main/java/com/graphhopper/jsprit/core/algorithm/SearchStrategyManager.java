@@ -109,6 +109,7 @@ public class SearchStrategyManager {
             sumProbabilities += weights.get(i) / sumWeights;
             if (randomFig < sumProbabilities) {
                 return strategies.get(i);
+                //return strategies.get(8);  StringRuin
             }
         }
         throw new IllegalStateException("no search-strategy found");
@@ -118,6 +119,10 @@ public class SearchStrategyManager {
         searchStrategyListeners.add(strategyListener);
     }
 
+    /*
+     * search stratage에 SearchStrategyModuleListener 등록
+     * 왜 하는지 모르겠다.
+     */
     public void addSearchStrategyModuleListener(SearchStrategyModuleListener moduleListener) {
         for (SearchStrategy s : strategies) {
             s.addModuleListener(moduleListener);

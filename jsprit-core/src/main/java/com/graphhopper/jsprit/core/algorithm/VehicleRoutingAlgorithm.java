@@ -219,8 +219,11 @@ public class VehicleRoutingAlgorithm {
         logger.info("iterations start");
         for (int i = 0; i < maxIterations; i++) {
             iterationStarts(i + 1, problem, solutions);
-            logger.debug("start iteration: {}", i);
+            if( i < 5 || i + 5 > maxIterations ) {
+            	logger.debug("start iteration: {}", i);
+            }
             counter.incCounter();
+            // 10개 strategy에서 random하게 1개 선택
             SearchStrategy strategy = searchStrategyManager.getRandomStrategy();
             DiscoveredSolution discoveredSolution = strategy.run(problem, solutions);
             if (logger.isTraceEnabled()) log(discoveredSolution);
@@ -298,6 +301,13 @@ public class VehicleRoutingAlgorithm {
         return algoListeners;
     }
 
+    /*
+     * [by hsb 2021.05.10]
+     * 자 여기서
+     * algoListener에도 l 을 등록하고
+     * strategeManager에도 등록한다.
+     * 왜 ? 두곳에 listener를 등록 하지???
+     */
     public void addListener(VehicleRoutingAlgorithmListener l) {
         algoListeners.addListener(l);
         if (l instanceof SearchStrategyListener) {

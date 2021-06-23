@@ -92,7 +92,7 @@ public class UpdateVariableCosts implements ActivityVisitor, StateUpdater {
 
         totalOperationCost += transportCost;
         totalOperationCost += actCost;
-
+        //[by hsb] 각 activity에서 
         states.putInternalTypedActivityState(act, InternalStates.COSTS, totalOperationCost);
 
         prevAct = act;

@@ -77,7 +77,8 @@ public class RegretInsertion extends AbstractInsertionStrategy {
 
 
     /**
-     * Runs insertion.
+     * Runs insertion. [by hsb: recreate 여기임.]
+     * algorithmStarts->informAlgorithmStarts->algorithm-lamdba->createSolution->insertJobs->this_function
      * <p>
      * <p>Before inserting a job, all unassigned jobs are scored according to its best- and secondBest-insertion plus additional scoring variables.
      */
@@ -114,7 +115,7 @@ public class RegretInsertion extends AbstractInsertionStrategy {
                 if (bestScoredJob.isNewRoute()) {
                     routes.add(bestScoredJob.getRoute());
                 }
-                insertJob(bestScoredJob.getJob(), bestScoredJob.getInsertionData(), bestScoredJob.getRoute());
+                insertJob(bestScoredJob.getJob(), bestScoredJob.getInsertionData(), bestScoredJob.getRoute());//******* 여기서 job 순서 insert [by hsb]
                 jobs.remove(bestScoredJob.getJob());
             }
             for (ScoredJob bad : badJobList) {
@@ -134,6 +135,12 @@ public class RegretInsertion extends AbstractInsertionStrategy {
         return null;
     }
 
+    /*
+     * nextJob?? return bestScoredJob ;
+     * unassignedJob에서 badJobs을 추출함.
+     * score가 가장 좋은 job을 bestScoreJob으로 선정하여 return한다.
+     *  
+     */
     private ScoredJob nextJob(Collection<VehicleRoute> routes, Collection<Job> unassignedJobList, List<ScoredJob> badJobs) {
         ScoredJob bestScoredJob = null;
         for (Job unassignedJob : unassignedJobList) {
@@ -156,6 +163,9 @@ public class RegretInsertion extends AbstractInsertionStrategy {
         return bestScoredJob;
     }
 
+    /*
+     * 
+     */
     static ScoredJob getScoredJob(Collection<VehicleRoute> routes, Job unassignedJob, JobInsertionCostsCalculator insertionCostsCalculator, ScoringFunction scoringFunction) {
         InsertionData best = null;
         InsertionData secondBest = null;
@@ -183,7 +193,7 @@ public class RegretInsertion extends AbstractInsertionStrategy {
             }
         }
 
-        VehicleRoute emptyRoute = VehicleRoute.emptyRoute();
+        VehicleRoute emptyRoute = VehicleRoute.emptyRoute(); // 어디에 쓰는거지?
         InsertionData iData = insertionCostsCalculator.getInsertionData(emptyRoute, unassignedJob, NO_NEW_VEHICLE_YET, NO_NEW_DEPARTURE_TIME_YET, NO_NEW_DRIVER_YET, benchmark);
         if (!(iData instanceof InsertionData.NoInsertionFound)) {
             if (best == null) {

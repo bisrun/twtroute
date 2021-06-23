@@ -15,8 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class TwtResult {
-    public TwtRequestParam_BaseData requestParam = null;
-
+    public TwtRequest_Base requestParam = null;
 
     // tasklist는 방문순서로 ordering 되어 있음,
     // request 할 때 tasklist와 다름
@@ -25,10 +24,17 @@ public class TwtResult {
     private OsrmTripMatrixResponseParam tripMatrix = null;
     public VehicleRoutingProblem problem= null;
     public VehicleRoutingProblemSolution solution= null;
-    public ArrayList<TwtResponseParam_SolutionUnassigned> unassigned_task = null;
+    public ArrayList<TwtResponse_SolutionUnassigned> unassigned_task = null;
     public OsrmRouteResponseParam_Base osrmRouteResponse = null;
-    public TwtResponseParam_Base twtResponse;
+    public TwtResponse_Base twtResponse;
     public String jsonResult;
+    public boolean debuginfo = false;
+    public double   proc_start_time = 0;
+    public double   proc_total_time_before_resp_json =0;
+    public double   proc_total_time_after_resp_json =0;
+    public double   proc_end_time_before_resp_json = 0;
+    public double   proc_end_time_after_resp_json = 0;
+    public double   proc_getmatrix_time =0;
 
 //    RouteProc routeProcess;
 
@@ -40,11 +46,11 @@ public class TwtResult {
 //        this.routeProcess = routeProcess;
 //    }
 
-    private TwtResult(TwtRequestParam_BaseData requestParam) {
+    private TwtResult(TwtRequest_Base requestParam) {
         this.requestParam = requestParam;
     }
 
-    public static TwtResult create(TwtRequestParam_BaseData requestParam) {
+    public static TwtResult create(TwtRequest_Base requestParam) {
         return new TwtResult(requestParam);
     }
     public OsrmTripMatrixResponseParam getTripMatrix() {

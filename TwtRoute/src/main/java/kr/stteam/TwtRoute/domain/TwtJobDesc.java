@@ -11,7 +11,8 @@ public class TwtJobDesc {
     double  duration;
     double  distance;
 
-    boolean isRoundtrip;
+
+
 
     ArrayList<TwtTaskItem> taskList ;
     TwtVehicleDesc vehicleInfo;

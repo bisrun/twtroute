@@ -57,6 +57,8 @@ public class PickupAndDeliverShipmentLoadActivityLevelConstraint implements Hard
 
     /**
      * Checks whether there is enough capacity to insert newAct between prevAct and nextAct.
+     * [by hsb]
+     * 여기서는 capacity를 확인한다. TW가 아니다.
      */
     @Override
     public ConstraintsStatus fulfilled(JobInsertionContext iFacts, TourActivity prevAct, TourActivity newAct, TourActivity nextAct, double prevActDepTime) {

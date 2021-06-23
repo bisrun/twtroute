@@ -86,6 +86,7 @@ class JobNeighborhoodsImpl implements JobNeighborhoods {
         return maxDistance;
     }
 
+    // job과 다른 job들간의 거리를 treeset에 입력한다. 거리순으로 소팅되어 있다. map(jobid, treeset(distance of other jobs))
     private void calculateDistancesFromJob2Job() {
         logger.debug("preprocess distances between locations ...");
         StopWatch stopWatch = new StopWatch();

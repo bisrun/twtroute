@@ -93,7 +93,7 @@ public class RefuseCollectionWithFastMatrixExample {
         Collection<VehicleRoutingProblemSolution> solutions = vra.searchSolutions();
 
         SolutionPrinter.print(Solutions.bestOf(solutions));
-
+        SolutionPrinter.print(vrp, Solutions.bestOf(solutions), SolutionPrinter.Print.VERBOSE);// by hsb
         new VrpXMLWriter(vrp, solutions).write("output/refuseCollectionExampleSolution.xml");
 
     }
@@ -135,6 +135,10 @@ public class RefuseCollectionWithFastMatrixExample {
                 continue;
             }
             String[] lineTokens = line.split(",");
+            if(Integer.parseInt(lineTokens[0]) == 9 && Integer.parseInt(lineTokens[1])==10)
+            {
+            	assert(true);
+            }
             matrixBuilder.addTransportDistance(Integer.parseInt(lineTokens[0]), Integer.parseInt(lineTokens[1]), Integer.parseInt(lineTokens[2]));
         }
         reader.close();

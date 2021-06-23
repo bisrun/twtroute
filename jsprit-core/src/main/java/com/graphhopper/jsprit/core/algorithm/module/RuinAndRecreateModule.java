@@ -77,6 +77,7 @@ public class RuinAndRecreateModule implements SearchStrategyModule {
         this.proportionOfUnassignedJobsToBeReinserted = proportionOfUnassignedJobsToBeReinserted;
     }
 
+    //여기 ruin , recreate,, unassigned job add [by hsb]
     @Override
     public VehicleRoutingProblemSolution runAndGetSolution(VehicleRoutingProblemSolution previousVrpSolution) {
         Collection<Job> ruinedJobs = ruin.ruin(previousVrpSolution.getRoutes());

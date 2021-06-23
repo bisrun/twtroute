@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   description: TSPTW route server
-  version: 0.1.6
+  version: 0.1.7
   title: TSPTW Route Server
   termsOfService: 'http://127.0.0.1/'
   contact:
@@ -81,6 +81,9 @@ definitions:
   requestJson:
     type: object
     properties:
+      protocol_ver:
+        type: string
+        description: '#.#.#'
       options:
         $ref: '#/definitions/options'
       vehicle:
@@ -104,17 +107,18 @@ definitions:
           - Unassigned
       solution:
         $ref: '#/definitions/solution'
+
   options:
     type: object
     properties:
       service_time:
         type: number
         description: 'default spend time in waypoint, unit:second'
-      req_route_geometry:
+      req_route_geom:
         type: boolean
         default: false
         description: 'to request route shape geometry, false=do not request, true=request'
-      req_debug:
+      req_debuginfo:
         type: boolean
         default: false
         description: >-
@@ -130,8 +134,8 @@ definitions:
     type: object
     required:
       - vehicle_id
-      - start_loc_id
-      - end_loc_id
+      - start_task_id
+      - end_task_id
     properties:
       driver_id:
         type: string
@@ -142,10 +146,10 @@ definitions:
       vehicle_type:
         type: string
         description: vehicle type
-      start_loc_id:
+      start_task_id:
         type: string
         description: start position id of services
-      end_loc_id:
+      end_task_id:
         type: string
         description: end position id of services
       start_time:
@@ -226,6 +230,7 @@ definitions:
         enum:
           - start
           - end
+          - delivery
           - service
       loc_coord:
         $ref: '#/definitions/coordinate'
@@ -246,15 +251,21 @@ definitions:
         type: integer
         description: visit order
       arrival_time:
-        type: integer
+        type: number
         description: 'unit:second  if task_type is start then this field is invalid'
       end_time:
-        type: integer
+        type: number
         description: 'unit:second if task_type is end then this field is invalid'
-      debug:
-        $ref: '#/definitions/debug_activity'
+      time_window:
+        type: array
+        description: 'time windows [start time , end time ]  ex :[32400, 36000] unit:second'
+        items:
+          type: number
       geometry:
         $ref: '#/definitions/geometry'
+      debug:
+        $ref: '#/definitions/debug_activity'
+
   route:
     type: object
     description: ' '
@@ -290,6 +301,14 @@ definitions:
     properties:
       task_id:
         type: string
+      req_task_index:
+        type: integer
+        description: ' '
+      time_window:
+        type: array
+        description: 'time windows [start time , end time ]  ex :[32400, 36000] unit:second'
+        items:
+          type: number
   solution:
     type: object
     properties:

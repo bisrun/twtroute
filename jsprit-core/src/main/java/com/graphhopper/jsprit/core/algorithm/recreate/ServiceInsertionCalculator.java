@@ -89,6 +89,12 @@ final class ServiceInsertionCalculator extends AbstractInsertionCalculator {
     /**
      * Calculates the marginal cost of inserting job i locally. This is based on the
      * assumption that cost changes can entirely covered by only looking at the predecessor i-1 and its successor i+1.
+     * 오호라 [by hsb]
+     * job i 를 insert 하는데 소요되는 marginal cost를 계산한다.
+     * cost변화는 단지 i-1, i+1 만 바라보는 것으로 전체를 커버한다고 가정한다.
+     * 
+     * jobToInsert를 route에 삽입가능한 index를 구한다. InsertionData 를 생성하여 return 한다.
+     * 만약 삽입불가하면  emptyInsertionData 을 return한다.
      */
     @Override
     public InsertionData getInsertionData(final VehicleRoute currentRoute, final Job jobToInsert, final Vehicle newVehicle, double newVehicleDepartureTime, final Driver newDriver, final double bestKnownCosts) {
@@ -101,6 +107,7 @@ final class ServiceInsertionCalculator extends AbstractInsertionCalculator {
 
         /*
         check hard constraints at route level
+        [by hsb] route contraint를 확인한다.
          */
         InsertionData noInsertion = checkRouteContraints(insertionContext, constraintManager);
         if (noInsertion != null) return noInsertion;

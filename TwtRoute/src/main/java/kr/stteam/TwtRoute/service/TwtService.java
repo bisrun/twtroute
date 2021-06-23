@@ -9,6 +9,7 @@ import com.graphhopper.jsprit.core.problem.VehicleRoutingProblem;
 import com.graphhopper.jsprit.core.problem.job.Job;
 import com.graphhopper.jsprit.core.problem.solution.VehicleRoutingProblemSolution;
 import com.graphhopper.jsprit.core.problem.solution.route.VehicleRoute;
+import com.graphhopper.jsprit.core.problem.solution.route.activity.TimeWindow;
 import com.graphhopper.jsprit.core.problem.solution.route.activity.TourActivity;
 import com.graphhopper.jsprit.core.problem.vehicle.VehicleImpl;
 import com.graphhopper.jsprit.core.problem.vehicle.VehicleType;
@@ -37,6 +38,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 @Service
 public class TwtService {
     private static Logger logger = LoggerFactory.getLogger(TwtService.class);
@@ -44,8 +46,6 @@ public class TwtService {
     private AppProperties appProperties;
     private RouteProc routeProc;
 
-    String VER_524_PORTNO = new String("20000");
-    String hostname = new String("192.168.6.45:20000");
     private TwtTaskItem.taskitem_type jobitem_type;
 
     @Autowired
@@ -54,11 +54,13 @@ public class TwtService {
         this.routeProc = routeProc;
     }
 
-    public TwtResponseParam_Base procTwt(ArrayList<TwtTaskItem> tasklist, TwtRequestParam_BaseData reqParam) {
+    public TwtResponse_Base procTwt(ArrayList<TwtTaskItem> tasklist, TwtRequest_Base reqParam) {
 
-        double tmtag_start = System.currentTimeMillis();
+
         FastVehicleRoutingTransportCostsMatrix costMatrixBuilder = null;
         TwtResult twtResult = TwtResult.create(reqParam);
+        twtResult.proc_start_time = System.currentTimeMillis();
+        twtResult.debuginfo = reqParam.getOptions().isReq_debuginfo();
 
         OsrmTripMatrixResponseParam tripMatrix = requestRouteTable(tasklist, twtResult);
         if (tripMatrix == null) {
@@ -95,8 +97,8 @@ public class TwtService {
 
         ;
         vehicleBuilder.setType(vehicleType);
-        vehicleBuilder.setEarliestStart(UtilCommon.convHMtoSec(reqParam.getVehicle().getStarttime()));
-        vehicleBuilder.setLatestArrival(UtilCommon.convHMtoSec(reqParam.getVehicle().getEndtime()));
+        vehicleBuilder.setEarliestStart(reqParam.getVehicle().getStart_time());
+        vehicleBuilder.setLatestArrival(reqParam.getVehicle().getEnd_time());
         VehicleImpl vehicle = vehicleBuilder.build();
 
         /*
@@ -152,9 +154,8 @@ public class TwtService {
         twtResult.setResultParam( problem, bestSolution);
 
 
-        TwtResponseParam_Base response = MakeTwtResult(twtResult);
-
-        double tmtag_end = System.currentTimeMillis();
+        TwtResponse_Base response = MakeTwtResult(twtResult);
+        twtResult.proc_end_time_after_resp_json = System.currentTimeMillis();
         SolutionPrinter.print(problem, bestSolution, SolutionPrinter.Print.VERBOSE);
         SolutionAnalyser a = new SolutionAnalyser(problem, bestSolution, problem.getTransportCosts());
 
@@ -163,7 +164,10 @@ public class TwtService {
         System.out.println("completion: " + a.getOperationTime());
         System.out.println("waiting: " + a.getWaitingTime());
 
-        logger.info("total took {} seconds", ((tmtag_end - tmtag_start) / 1000.0));
+
+        twtResult.proc_total_time_after_resp_json = twtResult.proc_end_time_after_resp_json - twtResult.proc_start_time;
+        logger.info("total took {} ms , total= {} ms", twtResult.proc_total_time_before_resp_json,
+            twtResult.proc_total_time_after_resp_json);
 
 
         //ObjectMapper mapper = new ObjectMapper();
@@ -240,16 +244,18 @@ public class TwtService {
     }
 
 
-    TwtResponseParam_Base MakeTwtResult(TwtResult twtResult) {
+    TwtResponse_Base MakeTwtResult(TwtResult twtResult) {
         try {
-            twtResult.twtResponse = new TwtResponseParam_Base();
+            twtResult.twtResponse = new TwtResponse_Base();
             setRouteResult(twtResult);
             setResultObject(twtResult);
 
             String responseJson = routeProc.requestRouteGeometry(twtResult);
             routeProc.setRouteGeometryInResult(responseJson, twtResult);
 
-            //setRouteGeometry(twtResult);
+            twtResult.proc_end_time_before_resp_json = System.currentTimeMillis();
+            twtResult.proc_total_time_before_resp_json = twtResult.proc_end_time_before_resp_json -twtResult.proc_start_time;
+            twtResult.twtResponse.setProcessing_time(twtResult.proc_total_time_before_resp_json);
             return twtResult.twtResponse;
 
         } catch (Exception e) {
@@ -285,38 +291,48 @@ public class TwtService {
     }
 
 
-    private TwtResponseParam_Base setResultObject(TwtResult twtResult) {
+    private TwtResponse_Base setResultObject(TwtResult twtResult) {
 
         //response base
-        TwtResponseParam_Solution solution = new TwtResponseParam_Solution();
-        solution.setCosts(100f);
+        TwtResponse_Solution solution = new TwtResponse_Solution();
 
-        ArrayList<TwtResponseParam_SolutionRoute> solutionRouteList = new ArrayList<TwtResponseParam_SolutionRoute>();
-        TwtResponseParam_SolutionRoute solutionRoute = new TwtResponseParam_SolutionRoute();
-        solutionRoute.setCosts(1000);
+        ArrayList<TwtResponse_SolutionRoute> solutionRouteList = new ArrayList<TwtResponse_SolutionRoute>();
+        TwtResponse_SolutionRoute solutionRoute = new TwtResponse_SolutionRoute();
 
-        ArrayList<TwtResponseParam_RouteActivite> routeActivityList = new ArrayList<TwtResponseParam_RouteActivite>();
+        ArrayList<TwtResponse_RouteActivity> routeActivityList = new ArrayList<TwtResponse_RouteActivity>();
         int order = 0;
         for (TwtTaskItem task : twtResult.tasklist) {
-            TwtResponseParam_RouteActivite activity = new TwtResponseParam_RouteActivite();
+            TwtResponse_RouteActivity activity = new TwtResponse_RouteActivity();
             activity.setTask_id(task.task_id);
-            activity.setPoint(new double[]{task.x, task.y});
+            activity.setLoc_coord(new double[]{task.x, task.y});
             activity.setLoc_name(task.poi_name);
             activity.setDistance(task.tbl_distance);
-            activity.setTms_duration(task.tbl_duration);
+            activity.setDuration(task.tbl_duration);
             activity.setReq_task_index(task.index);
-            activity.setTms_arrival(task.tm_arrival);
-            activity.setTms_end(task.tm_end);
-            activity.setTm_arrival(UtilCommon.convSectoHMS(task.tm_arrival));
-            activity.setTm_end(UtilCommon.convSectoHMS(task.tm_end));
-            if(task.tw_req_end > 0 ){
-                ArrayList<String> tw = new  ArrayList<String>();
-                tw.add(UtilCommon.convSectoHM(task.tw_req_start));
-                tw.add(UtilCommon.convSectoHM(task.tw_req_end));
-                activity.setTimewindow(tw);
+            activity.setArrival_time(task.tm_arrival);
+            activity.setEnd_time(task.tm_end);
+            if (task.task_type ==  TwtTaskItem.taskitem_type.job_start ) {
+                activity.setTask_type("start");
+            }
+            else if (task.task_type ==  TwtTaskItem.taskitem_type.job_end ) {
+                activity.setTask_type("end");
+            }
+            else if (task.task_type ==  TwtTaskItem.taskitem_type.job_delivery ) {
+                activity.setTask_type("delivery");
+            }
+            else {// (task.task_type ==  TwtTaskItem.taskitem_type.job_unassigned )
+            }
 
+            activity.setTask_type("");
+
+            if(task.tw_req_end > 0 ){
+
+//                ArrayList<String> tw = new  ArrayList<String>();
+//                tw.add(UtilCommon.convSectoHM(task.tw_req_start));
+//                tw.add(UtilCommon.convSectoHM(task.tw_req_end));
+//                activity.setTime_window(tw);
                 double[] tws = new double[]{task.tw_req_start, task.tw_req_end};
-                activity.setTms_timewindow(tws);
+                activity.setTime_window(tws);
             }
 
             activity.setLoc_name(task.poi_name);
@@ -335,11 +351,17 @@ public class TwtService {
         twtResult.twtResponse.setStatus("OK");
         twtResult.twtResponse.setSolution(solution);
 
+
+
         return twtResult.twtResponse;
         //response base-solution
 
     }
 
+    /**
+     *
+     * @param twtResult
+     */
     public void setRouteResult(TwtResult twtResult) {
 
         List<VehicleRoute> tripRouteList = new ArrayList<VehicleRoute>(twtResult.solution.getRoutes());
@@ -348,6 +370,9 @@ public class TwtService {
         int visit_order = 0;
         TwtTaskItem task_rst = null;
         OsrmTripMatrixResponseParam tripMatrix = twtResult.getTripMatrix();
+        double route_distance = 0;
+        double route_duration = 0;
+        double route_transport_time = 0;
 
         ArrayList<TwtTaskItem> orderedTasklist = new ArrayList<TwtTaskItem>();
 
@@ -366,7 +391,8 @@ public class TwtService {
 
             task_rst.tm_end = (int) Math.round(route.getStart().getEndTime());
             task_rst.tm_arrival = (int) Math.round(route.getStart().getArrTime());
-            task_rst.task_id = route.getStart().getName();
+            //task_rst.task_id = route.getStart().getName();
+            task_rst.task_id = twtResult.requestParam.getStartTask().getTask_id();
             task_rst.task_type = TwtTaskItem.taskitem_type.job_start;
             task_rst.poi_name = twtResult.requestParam.getServices().get(task_rst.index).getName();
 
@@ -441,7 +467,8 @@ public class TwtService {
 
             task_rst.tm_end = route.getEnd().getEndTime();
             task_rst.tm_arrival = route.getEnd().getArrTime();
-            task_rst.task_id = route.getEnd().getName();
+            //task_rst.task_id = route.getEnd().getName();
+            task_rst.task_id = twtResult.requestParam.getEndTask().getTask_id();
 
             task_rst.sum_cost = costs;
             task_rst.last_cost = c;
@@ -459,12 +486,15 @@ public class TwtService {
 
 
         if (!twtResult.solution.getUnassignedJobs().isEmpty()) {
-            twtResult.unassigned_task = new ArrayList<TwtResponseParam_SolutionUnassigned>();
+            twtResult.unassigned_task = new ArrayList<TwtResponse_SolutionUnassigned>();
             for (Job j : twtResult.solution.getUnassignedJobs()) {
-                TwtResponseParam_SolutionUnassigned unassigned = new TwtResponseParam_SolutionUnassigned();
+                TwtResponse_SolutionUnassigned unassigned = new TwtResponse_SolutionUnassigned();
                 unassigned.setTask_id(j.getId());
                 unassigned.setReq_task_index(j.getIndex());
-
+                if( j.getActivities().get(0).getTimeWindows().size() > 0) {//if there is time window in task
+                    TimeWindow tw = j.getActivities().get(0).getTimeWindows().iterator().next();
+                    unassigned.setTime_window(new double[]{tw.getStart(), tw.getEnd()});
+                }
                 twtResult.unassigned_task.add(unassigned);
             }
         }

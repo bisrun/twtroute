@@ -91,11 +91,18 @@ final class VehicleTypeDependentJobInsertionCalculator implements JobInsertionCo
         logger.debug("set vehicleSwitchAllowed to " + vehicleSwitchAllowed);
         this.vehicleSwitchAllowed = vehicleSwitchAllowed;
     }
+    
+    /*
+     * 재귀함수 아님. 함수이름이 같고 클래스 다름.
+     * vehicle 중에 가장 좋은 cost를 가지는  InsertionData 를 return 한다.
+     */
 
     public InsertionData getInsertionData(final VehicleRoute currentRoute, final Job jobToInsert, final Vehicle vehicle, double newVehicleDepartureTime, final Driver driver, final double bestKnownCost) {
         if(vehicle != null){
             return insertionCalculator.getInsertionData(currentRoute, jobToInsert, vehicle, newVehicleDepartureTime, driver, bestKnownCost);
         }
+        
+        // vehicle 할당
         Vehicle selectedVehicle = currentRoute.getVehicle();
         Driver selectedDriver = currentRoute.getDriver();
         InsertionData bestIData = new InsertionData.NoInsertionFound();
@@ -109,6 +116,8 @@ final class VehicleTypeDependentJobInsertionCalculator implements JobInsertionCo
         } else { //if no vehicle has been assigned, i.e. it is an empty route
             relevantVehicles.addAll(fleetManager.getAvailableVehicles());
         }
+        
+        // vehicle 중에 가장 좋은 cost를 가지는  InsertionData 를 return 한다.
         for (Vehicle v : relevantVehicles) {
             double depTime;
             if (v == selectedVehicle) depTime = currentRoute.getDepartureTime();

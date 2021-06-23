@@ -185,6 +185,7 @@ public class Jsprit {
             properties = new Properties(createDefaultProperties());
         }
 
+        //[by hsb] input properties
         private Properties createDefaultProperties() {
             Properties defaults = new Properties();
             defaults.put(Strategy.RADIAL_BEST.toString(), "0.");
@@ -208,7 +209,7 @@ public class Jsprit {
 
             defaults.put(Parameter.FIXED_COST_PARAM.toString(), "0.");
             defaults.put(Parameter.VEHICLE_SWITCH.toString(), "true");
-            defaults.put(Parameter.ITERATIONS.toString(), "2000");
+            defaults.put(Parameter.ITERATIONS.toString(), "10");//origial value .2000
             defaults.put(Parameter.REGRET_DISTANCE_SCORER.toString(), ".05");
             defaults.put(Parameter.REGRET_TIME_WINDOW_SCORER.toString(), "-.1");
             defaults.put(Parameter.THREADS.toString(), "1");
@@ -356,7 +357,7 @@ public class Jsprit {
 
     private ConstraintManager constraintManager;
 
-    private ExecutorService es;
+    private ExecutorService es; // thread pool [by hsb]
 
     private Integer noThreads;
 
@@ -382,7 +383,7 @@ public class Jsprit {
         this.stateManager = builder.stateManager;
         this.constraintManager = builder.constraintManager;
         this.es = builder.es;
-        this.noThreads = builder.noThreads;
+        this.noThreads = builder.noThreads; // thread count
         this.addCoreConstraints = builder.addConstraints;
         this.properties = builder.properties;
         this.objectiveFunction = builder.objectiveFunction;
@@ -493,6 +494,7 @@ public class Jsprit {
                 random)
         );
         IterationStartsListener noise = (i, problem, solutions) -> worst.setNoiseMaker(() -> {
+        	//[by hsb] random.nextDouble() < 0.2
             if (random.nextDouble() < toDouble(getProperty(Parameter.RUIN_WORST_NOISE_PROB.toString()))) {
                 return toDouble(getProperty(Parameter.RUIN_WORST_NOISE_LEVEL.toString()))
                     * maxCosts * random.nextDouble();
@@ -604,6 +606,9 @@ public class Jsprit {
                 schrimpfAcceptance.setInitialThreshold(Double.valueOf(properties.getProperty(Parameter.THRESHOLD_INI_ABS.toString())));
             } else {
                 schrimpfThreshold = (i, problem, solutions) -> {
+                	// [by hsb]
+                	// i == i : initial iteration, i.e there is no previous solution.
+                	//  refer to (public Collection<VehicleRoutingProblemSolution> searchSolutions())
                     if (i == 1) {
                         double initialThreshold = Solutions.bestOf(solutions).getCost() * toDouble(getProperty(Parameter.THRESHOLD_INI.toString()));
                         schrimpfAcceptance.setInitialThreshold(initialThreshold);
@@ -660,30 +665,38 @@ public class Jsprit {
             .withStrategy(stringBest, toDouble(getProperty(Strategy.STRING_BEST.toString())))
             .withStrategy(stringRegret, toDouble(getProperty(Strategy.STRING_REGRET.toString())));
 
-        for (SearchStrategy customStrategy : customStrategies.keySet()) {
+        for (SearchStrategy customStrategy : customStrategies.keySet()) { //[by hsb] currently size()= 0, empty set
             prettyBuilder.withStrategy(customStrategy, customStrategies.get(customStrategy));
         }
-
+        // [by hsb]"construction != best_insertion
         if (getProperty(Parameter.CONSTRUCTION.toString()).equals(Construction.BEST_INSERTION.toString())) {
             prettyBuilder.constructInitialSolutionWith(best, objectiveFunction);
         } else {
-            prettyBuilder.constructInitialSolutionWith(regret, objectiveFunction);
+            prettyBuilder.constructInitialSolutionWith(regret, objectiveFunction);//<- 여기 실행, ie regret insertion 사용
         }
         prettyBuilder.withObjectiveFunction(objectiveFunction);
 
 
         VehicleRoutingAlgorithm vra = prettyBuilder.build();
+        
+        // add start_listener 
         if(schrimpfThreshold != null) {
             vra.addListener(schrimpfThreshold);
         }
-        vra.addListener(noiseConfigurator);
-        vra.addListener(noise);
-        vra.addListener(clusters);
+        vra.addListener(noiseConfigurator);// [by hsb] InsertionNoiseMaker:IterationStartsListener::VehicleRoutingAlgorithmListener 
+        vra.addListener(noise);//[by hsb] IterationStartsListener:VehicleRoutingAlgorithmListener 
+        vra.addListener(clusters);//[by hsb] RuinClusters:IterationStartsListener::VehicleRoutingAlgorithmListener 
+        
+        //[by hsb]InsertionStartsListener, JobInsertedListener, 
         if (increasingAbsoluteFixedCosts != null) vra.addListener(increasingAbsoluteFixedCosts);
 
+        
         if(toBoolean(getProperty(Parameter.BREAK_SCHEDULING.toString()))) {
+        	//[by hsb]InsertionStartsListener,JobInsertedListener, RuinListener
             vra.addListener(new BreakScheduling(vrp, stateManager, constraintManager));
+            
         }
+        // end of adding listener 
         handleExecutorShutdown(vra);
         vra.setMaxIterations(Integer.valueOf(properties.getProperty(Parameter.ITERATIONS.toString())));
 
@@ -760,10 +773,15 @@ public class Jsprit {
         if (objectiveFunction != null) return objectiveFunction;
 
         SolutionCostCalculator solutionCostCalculator = new SolutionCostCalculator() {
+        	/**
+        	 * calculate a cost of solution [by hsb]
+        	 * when a solution has a unassigned job , then add panelty cost as much as count of unassigned job.
+        	 */
             @Override
             public double getCosts(VehicleRoutingProblemSolution solution) {
                 double costs = 0.;
-
+                //VehicleRoute 
+                //solution.getRoutes  
                 for (VehicleRoute route : solution.getRoutes()) {
                     costs += route.getVehicle().getType().getVehicleCostParams().fix;
                     boolean hasBreak = false;
@@ -784,6 +802,8 @@ public class Jsprit {
                         }
                     }
                 }
+                
+                // unassigned job -->add panelty cost
                 for(Job j : solution.getUnassignedJobs()){
                     costs += maxCosts * 2 * (11 - j.getPriority());
                 }

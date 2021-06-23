@@ -32,6 +32,13 @@ import java.util.List;
 
 /**
  * Created by schroeder on 06/02/17.
+ * [by hsb] constraint를 충족하는지 검사. 만약 충족하지 못하면 return emptyInsertionData, 충족하면 return null 
+ * JobInsertionContext insertionContext : job
+ * ConstraintManager constraintManager : constraint manager
+ * [0]	ServiceLoadRouteLevelConstraint
+ * [1]	HardSkillConstraint
+ * [2]	SwitchNotFeasible
+ * ...	
  */
 abstract class AbstractInsertionCalculator implements JobInsertionCostsCalculator {
 

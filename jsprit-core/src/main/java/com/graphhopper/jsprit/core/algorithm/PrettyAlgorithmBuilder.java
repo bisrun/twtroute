@@ -40,8 +40,12 @@ public class PrettyAlgorithmBuilder {
 
     private final VehicleFleetManager fleetManager;
 
+    //[by hsb] statemanager is derived from all listener.
+    //   ex : StateManager implements RouteAndActivityStateGetter, IterationStartsListener, RuinListener, InsertionStartsListener, JobInsertedListener, InsertionEndsListener
+  
     private final StateManager stateManager;
 
+    // [by hsb]   ConstraintManager implements HardActivityConstraint, HardRouteConstraint, SoftActivityConstraint, SoftRouteConstraint
     private final ConstraintManager constraintManager;
 
     private SearchStrategyManager searchStrategyManager;
@@ -87,7 +91,9 @@ public class PrettyAlgorithmBuilder {
             AlgorithmUtil.addCoreConstraints(constraintManager,stateManager,vrp);
         }
         VehicleRoutingAlgorithm vra = new VehicleRoutingAlgorithm(vrp, searchStrategyManager, objectiveFunction);
-        vra.addListener(stateManager);
+        vra.addListener(stateManager); //stateManager는 vrp 및 listener 를 관리한다.
+        								//vra에 ... 생기면 ,
+       
         RemoveEmptyVehicles removeEmptyVehicles = new RemoveEmptyVehicles(fleetManager);
         ResetAndIniFleetManager resetAndIniFleetManager = new ResetAndIniFleetManager(fleetManager);
         VehicleSwitched vehicleSwitched = new VehicleSwitched(fleetManager);

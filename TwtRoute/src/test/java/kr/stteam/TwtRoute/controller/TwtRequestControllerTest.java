@@ -3,33 +3,23 @@ package kr.stteam.TwtRoute.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.stteam.TwtRoute.AppProperties;
-import kr.stteam.TwtRoute.protocol.OsrmRouteResponseParam_Base;
-import kr.stteam.TwtRoute.protocol.TwtResponseParam_Base;
-import kr.stteam.TwtRoute.protocol.TwtResponseParam_RouteActivite;
+import kr.stteam.TwtRoute.protocol.TwtResponse_Base;
+import kr.stteam.TwtRoute.protocol.TwtResponse_RouteActivity;
 import kr.stteam.TwtRoute.service.RouteProcOSRM;
-import kr.stteam.TwtRoute.service.TwtService;
-import lombok.val;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.WebTestClient;
 
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -61,16 +51,16 @@ class TwtRequestControllerTest {
         String responseJson = testRestTemplate.postForObject("/twtrip", inputJson, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
-        TwtResponseParam_Base twtResponse = null;
+        TwtResponse_Base twtResponse = null;
         try {
-            twtResponse = mapper.readValue(responseJson, TwtResponseParam_Base.class);
+            twtResponse = mapper.readValue(responseJson, TwtResponse_Base.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         logger.info(responseJson);
         //then
         assertNotNull(twtResponse);
-        ArrayList<TwtResponseParam_RouteActivite> activites = twtResponse.getSolution().getRoutes().get(0).getActivities();
+        ArrayList<TwtResponse_RouteActivity> activites = twtResponse.getSolution().getRoutes().get(0).getActivities();
 
         assertThat( activites.get(0).getLoc_name()).isEqualToIgnoringCase("mappers");
         assertThat( activites.get(1).getLoc_name()).isEqualToIgnoringCase("spo-any");

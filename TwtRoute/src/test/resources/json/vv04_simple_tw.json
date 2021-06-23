@@ -23,22 +23,29 @@
         {
             "task_id": "1",
             "name": "송파나루역",
-            "loc_coord": [ 127.1121007 ,37.5098758 ]
+            "loc_coord": [ 127.1121007 ,37.5098758 ],
+            "time_window": [32600,33000]
         },
         {
             "task_id": "2",
             "name": "석촌역",
-            "loc_coord": [ 127.1078362 ,37.5053189 ]
+            "loc_coord": [ 127.1078362 ,37.5053189 ],
+            "time_window": [33000,34000]
         },
         {
             "task_id": "3",
             "name": "송파역",
-            "loc_coord": [127.1128161 ,37.4993756]
+            "loc_coord": [127.1128161 ,37.4993756],
+            "time_window": [34000,35000]
         },
         {
             "task_id": "4",
             "name": "spo-any",
-            "loc_coord": [ 127.1162522, 37.5078703 ]
+            "loc_coord": [ 127.1162522, 37.5078703 ],
+            "time_window": [35000,36000],
+            "service_time": 3000,
+            "dir_angle": -1,
+            "keep_entry_angle": false
         }
     ]
 }

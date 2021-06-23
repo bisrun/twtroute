@@ -50,6 +50,8 @@ public class ServiceLoadRouteLevelConstraint implements HardRouteConstraint {
         Capacity maxLoadAtRoute = stateManager.getRouteState(insertionContext.getRoute(), InternalStates.MAXLOAD, Capacity.class);
         if (maxLoadAtRoute == null) maxLoadAtRoute = defaultValue;
         Capacity capacityDimensions = insertionContext.getNewVehicle().getType().getCapacityDimensions();
+        
+        // 현재최대용량 > newcar_capa 이면 return false, 즉 constraint를 충족 못함.
         if (!maxLoadAtRoute.isLessOrEqual(capacityDimensions)) {
             return false;
         }

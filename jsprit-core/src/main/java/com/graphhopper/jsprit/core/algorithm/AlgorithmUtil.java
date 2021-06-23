@@ -39,16 +39,23 @@ public class AlgorithmUtil {
         Collection<Job> allJobs = vrp.getJobsInclusiveInitialJobsInRoutes().values();
         boolean anyJobsWithoutLocation = allJobs.stream().flatMap(job -> job.getActivities().stream()).anyMatch(activity -> activity.getLocation() == null);
 
+        // 위치없는 job이 있나?
         if (anyJobsWithoutLocation) {
             stateManager.addStateUpdater(new UpdateActivityNextLocations());
             stateManager.addStateUpdater(new UpdateActivityPrevLocations());
         }
+        
+        //[by hsb] add constraint
         constraintManager.addTimeWindowConstraint();
         constraintManager.addLoadConstraint();
         constraintManager.addSkillsConstraint();
         constraintManager.addConstraint(new SwitchNotFeasible(stateManager));
+        
+        //
         stateManager.updateLoadStates();
         stateManager.updateTimeWindowStates();
+        
+        
         UpdateVehicleDependentPracticalTimeWindows twUpdater = new UpdateVehicleDependentPracticalTimeWindows(stateManager, vrp.getTransportCosts(), vrp.getActivityCosts());
         twUpdater.setVehiclesToUpdate(new UpdateVehicleDependentPracticalTimeWindows.VehiclesToUpdate() {
 

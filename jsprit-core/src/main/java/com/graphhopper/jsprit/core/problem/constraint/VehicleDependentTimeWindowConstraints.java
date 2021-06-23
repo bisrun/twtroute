@@ -110,6 +110,7 @@ public class VehicleDependentTimeWindowConstraints implements HardActivityConstr
 			/*
              *                     |--- newAct ---|
 			 *  |--- nextAct ---|
+			 *  [by hsb] why not NOT_FULFILLED_BREAK
 			 */
         if (newAct.getTheoreticalEarliestOperationStartTime() > nextAct.getTheoreticalLatestOperationStartTime()) {
             return ConstraintsStatus.NOT_FULFILLED;

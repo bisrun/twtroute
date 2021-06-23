@@ -35,7 +35,9 @@ public class UpdateVehicleDependentPracticalTimeWindows implements RouteVisitor,
     @Override
     public void visit(VehicleRoute route) {
         begin(route);
-        Iterator<TourActivity> revIterator = route.getTourActivities().reverseActivityIterator();
+        
+        // 도착 activity 부터 visit 함수 실행 (reverseA.. Iter..)
+        Iterator<TourActivity> revIterator = route.getTourActivities().reverseActivityIterator(); 
         while (revIterator.hasNext()) {
             visit(revIterator.next());
         }
@@ -82,8 +84,14 @@ public class UpdateVehicleDependentPracticalTimeWindows implements RouteVisitor,
         this.route = route;
         vehicles = vehiclesToUpdate.get(route);
         for (Vehicle vehicle : vehicles) {
+        	
+        	//[by hsb] input latest arrival time of this vehicle.
             latest_arrTimes_at_prevAct[vehicle.getVehicleTypeIdentifier().getIndex()] = vehicle.getLatestArrival();
+            
+            //[by hsb] input latest arrival 차고(depot position) of this vehicle.
             Location location = vehicle.getEndLocation();
+            
+            //[by hsb] 차량이 차고로 돌아가지 않으면, 마지막 배송지점 입력
             if(!vehicle.isReturnToDepot()){
                 location = route.getEnd().getLocation();
             }
@@ -94,11 +102,17 @@ public class UpdateVehicleDependentPracticalTimeWindows implements RouteVisitor,
 
     public void visit(TourActivity activity) {
         for (Vehicle vehicle : vehicles) {
-            double latestArrTimeAtPrevAct = latest_arrTimes_at_prevAct[vehicle.getVehicleTypeIdentifier().getIndex()];
-            Location prevLocation = location_of_prevAct[vehicle.getVehicleTypeIdentifier().getIndex()];
+            double latestArrTimeAtPrevAct = latest_arrTimes_at_prevAct[vehicle.getVehicleTypeIdentifier().getIndex()];// 이전 지점(activity) 까지의 도착시간
+            Location prevLocation = location_of_prevAct[vehicle.getVehicleTypeIdentifier().getIndex()];// 이전 지점(activity) 위치
+            
+            // 허용 가능한 도착시간 = N'th 지점 도착시간 - ( activity.pos --> N'th.pos 시간 ) - (duration time i.e service time)
             double potentialLatestArrivalTimeAtCurrAct = latestArrTimeAtPrevAct - transportCosts.getBackwardTransportTime(activity.getLocation(), prevLocation,
                 latestArrTimeAtPrevAct, route.getDriver(), vehicle) - activityCosts.getActivityDuration(activity, latestArrTimeAtPrevAct, route.getDriver(), route.getVehicle());
+            
+            // activity.service.getTimeWindow().getEnd()-- last end time in tw of activity
             double latestArrivalTime = Math.min(activity.getTheoreticalLatestOperationStartTime(), potentialLatestArrivalTimeAtCurrAct);
+            
+            // 지점도착시간 < 지점출발시간 : 도착-->서비스-->출발 이므로 ,  
             if (latestArrivalTime < activity.getTheoreticalEarliestOperationStartTime()) {
                 stateManager.putTypedInternalRouteState(route, vehicle, InternalStates.SWITCH_NOT_FEASIBLE, true);
             }

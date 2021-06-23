@@ -31,6 +31,7 @@ import java.util.Random;
 
 /**
  * Created by schroeder on 16/01/15.
+ * [by hsb] noise ??
  */
 class ConcurrentInsertionNoiseMaker implements SoftActivityConstraint, IterationStartsListener {
 

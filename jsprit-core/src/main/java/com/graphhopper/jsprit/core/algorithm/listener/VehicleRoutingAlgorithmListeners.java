@@ -121,7 +121,11 @@ public class VehicleRoutingAlgorithmListeners {
         }
     }
 
-
+/*
+ * [by hsb]
+ * algorithm listener에서 받은 .  inform algorithm start 실행함.
+ * listener 는 약 10개정도 존재함. 
+ */
     public void algorithmStarts(VehicleRoutingProblem problem, VehicleRoutingAlgorithm algorithm, Collection<VehicleRoutingProblemSolution> solutions) {
         for (PrioritizedVRAListener l : algorithmListeners) {
             if (l.getListener() instanceof AlgorithmStartsListener) {

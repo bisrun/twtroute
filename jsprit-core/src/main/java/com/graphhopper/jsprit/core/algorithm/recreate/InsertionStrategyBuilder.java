@@ -196,6 +196,8 @@ public class InsertionStrategyBuilder {
         calcBuilder.setAllowVehicleSwitch(allowVehicleSwitch);
         JobInsertionCostsCalculator costCalculator = calcBuilder.build();
 
+        
+        // insertion lister 는  array로 관리됨.
         InsertionStrategy insertion;
         if (strategy.equals(Strategy.BEST)) {
             if (executor == null) {

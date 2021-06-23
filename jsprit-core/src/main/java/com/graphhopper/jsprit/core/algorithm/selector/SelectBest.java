@@ -34,6 +34,9 @@ public class SelectBest implements SolutionSelector {
         return selector;
     }
 
+    /*
+     * cost가 가장낮은 solution을 bestSolution으로 찾음
+     */
     @Override
     public VehicleRoutingProblemSolution selectSolution(Collection<VehicleRoutingProblemSolution> solutions) {
         double minCost = Double.MAX_VALUE;

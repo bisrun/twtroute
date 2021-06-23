@@ -2,18 +2,18 @@ package kr.stteam.TwtRoute.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.stteam.TwtRoute.protocol.TwtRequestParam_BaseData;
+import kr.stteam.TwtRoute.protocol.TwtRequest_Base;
 
 public class TwtRequestParameter {
     private TwtRequestParameter() {
     }
 
-    static public TwtRequestParam_BaseData parseParam(String jsonParam){
+    static public TwtRequest_Base parseParam(String jsonParam){
 
         ObjectMapper mapper = new ObjectMapper();
-        TwtRequestParam_BaseData req = null;
+        TwtRequest_Base req = null;
         try {
-            req = mapper.readValue(jsonParam, TwtRequestParam_BaseData.class);
+            req = mapper.readValue(jsonParam, TwtRequest_Base.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

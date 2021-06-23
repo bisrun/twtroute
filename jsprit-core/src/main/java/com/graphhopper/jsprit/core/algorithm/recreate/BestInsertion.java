@@ -89,7 +89,8 @@ public final class BestInsertion extends AbstractInsertionStrategy {
                 badJobs.add(unassignedJob);
                 markUnassigned(unassignedJob, empty.getFailedConstraintNames());
             }
-            else insertJob(unassignedJob, bestInsertion.getInsertionData(), bestInsertion.getRoute());
+            else 
+            	insertJob(unassignedJob, bestInsertion.getInsertionData(), bestInsertion.getRoute());
         }
         return badJobs;
     }

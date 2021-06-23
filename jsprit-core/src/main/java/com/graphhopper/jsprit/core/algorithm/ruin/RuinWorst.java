@@ -64,11 +64,14 @@ public final class RuinWorst extends AbstractRuinStrategy {
     @Override
     public Collection<Job> ruinRoutes(Collection<VehicleRoute> vehicleRoutes) {
         List<Job> unassignedJobs = new ArrayList<>();
-        int nOfJobs2BeRemoved = getRuinShareFactory().createNumberToBeRemoved();
+        int nOfJobs2BeRemoved = getRuinShareFactory().createNumberToBeRemoved();// 이것도 random
         ruin(vehicleRoutes, nOfJobs2BeRemoved, unassignedJobs);
         return unassignedJobs;
     }
 
+    /*
+     * seq-job에서 worst cost를 가지는 job을 remove하고, unassinged job으로 만든다.
+     */
     private void ruin(Collection<VehicleRoute> vehicleRoutes, int nOfJobs2BeRemoved, List<Job> unassignedJobs) {
         int toRemove = nOfJobs2BeRemoved;
         while (toRemove > 0) {
@@ -81,6 +84,13 @@ public final class RuinWorst extends AbstractRuinStrategy {
         }
     }
 
+    /*
+     *  job activities 에서 me (from->me->to)입장에서 cost를 계산하여
+     *  가장 cost가 높은 , 즉 worst한 job을 return 한다.
+     *  cost계산은 a+b-c 로한다. ( a=from~me, b=me~to, c=from~to )
+     *  a, b, c를 구할때, 약간의 random cost를 사용한다.
+     */
+    
     private Job getWorst(Collection<VehicleRoute> copied) {
         Job worst = null;
         double bestSavings = Double.MIN_VALUE;

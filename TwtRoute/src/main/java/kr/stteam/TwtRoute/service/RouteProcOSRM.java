@@ -166,7 +166,7 @@ public class RouteProcOSRM implements RouteProc{
             }
 
             TripGeometry geometry = new TripGeometry();
-            ArrayList<TwtResponseParam_RouteActivite> activities = twtResult.twtResponse.getSolution().getRoutes().get(0).getActivities();
+            ArrayList<TwtResponse_RouteActivity> activities = twtResult.twtResponse.getSolution().getRoutes().get(0).getActivities();
 
             geometry.setCoordinates(linecoords);
             activities.get(route_order).setGeometry(geometry);
