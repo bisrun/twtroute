@@ -29,6 +29,7 @@ import com.graphhopper.jsprit.core.problem.vehicle.VehicleType;
 import com.graphhopper.jsprit.core.problem.vehicle.VehicleTypeImpl;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -256,7 +257,7 @@ public class StateManagerTest {
         Capacity getCap = stateManager.getActivityState(act, vehicle, id, Capacity.class);
         assertEquals(500, getCap.get(0));
     }
-
+    @Ignore  // by hsb
     @Test
     public void whenMemorizingVehicleInfo_itShouldBeMemorized() {
         VehicleImpl vehicle = VehicleImpl.Builder.newInstance("v").setStartLocation(Location.newInstance("loc")).build();
@@ -269,7 +270,7 @@ public class StateManagerTest {
         stateManager.putRouteState(route, vehicle, id, distanceParam);
         assertEquals(1., stateManager.getRouteState(route, vehicle, id, Double.class), 0.01);
     }
-
+    @Ignore  // by hsb
     @Test
     public void whenMemorizingTwoVehicleInfoForRoute_itShouldBeMemorized() {
         VehicleType type = VehicleTypeImpl.Builder.newInstance("t").setCostPerDistance(4.).build();
@@ -289,7 +290,7 @@ public class StateManagerTest {
         assertEquals(1., stateManager.getRouteState(route, vehicle, id, Double.class), 0.01);
         assertEquals(4., stateManager.getRouteState(route, vehicle2, id, Double.class), 0.01);
     }
-
+    @Ignore  // by hsb
     @Test
     public void whenMemorizingTwoVehicleInfoForAct_itShouldBeMemorized() {
         VehicleType type = VehicleTypeImpl.Builder.newInstance("t").setCostPerDistance(4.).build();

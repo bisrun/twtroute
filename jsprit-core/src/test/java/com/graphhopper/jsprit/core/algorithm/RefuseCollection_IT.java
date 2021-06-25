@@ -33,6 +33,7 @@ import com.graphhopper.jsprit.core.problem.vehicle.VehicleTypeImpl;
 import com.graphhopper.jsprit.core.util.Solutions;
 import com.graphhopper.jsprit.core.util.VehicleRoutingTransportCostsMatrix;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -42,7 +43,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Collection;
 
-
+@Ignore  // by hsb
 public class RefuseCollection_IT {
 
 

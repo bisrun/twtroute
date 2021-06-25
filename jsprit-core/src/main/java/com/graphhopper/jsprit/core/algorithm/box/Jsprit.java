@@ -209,7 +209,7 @@ public class Jsprit {
 
             defaults.put(Parameter.FIXED_COST_PARAM.toString(), "0.");
             defaults.put(Parameter.VEHICLE_SWITCH.toString(), "true");
-            defaults.put(Parameter.ITERATIONS.toString(), "10");//origial value .2000
+            defaults.put(Parameter.ITERATIONS.toString(), "2000");//origial value .2000
             defaults.put(Parameter.REGRET_DISTANCE_SCORER.toString(), ".05");
             defaults.put(Parameter.REGRET_TIME_WINDOW_SCORER.toString(), "-.1");
             defaults.put(Parameter.THREADS.toString(), "1");

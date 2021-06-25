@@ -27,6 +27,7 @@ import com.graphhopper.jsprit.core.problem.vehicle.VehicleImpl;
 import com.graphhopper.jsprit.core.problem.vehicle.VehicleTypeImpl;
 import com.graphhopper.jsprit.core.util.Solutions;
 import com.graphhopper.jsprit.core.util.VehicleRoutingTransportCostsMatrix;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -42,6 +43,7 @@ import static org.junit.Assert.assertEquals;
 public class RefuseCollectionWithCostsHigherThanTimesAndFiniteFleet_IT {
 
     @Test
+    @Ignore  // by hsb
     public void testAlgo() {
 
 

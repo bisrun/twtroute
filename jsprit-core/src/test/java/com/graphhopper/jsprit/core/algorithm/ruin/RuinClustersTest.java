@@ -27,6 +27,7 @@ import com.graphhopper.jsprit.core.problem.solution.route.VehicleRoute;
 import com.graphhopper.jsprit.core.problem.vehicle.VehicleImpl;
 import com.graphhopper.jsprit.core.util.RandomNumberGeneration;
 import junit.framework.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -37,7 +38,7 @@ import java.util.Random;
  * Created by schroeder on 06/03/15.
  */
 public class RuinClustersTest {
-
+    @Ignore  // by hsb
     @Test
     public void itShouldRuinTwoObviousClusters() {
         Service s0 = Service.Builder.newInstance("s0").setLocation(Location.newInstance(9, 0)).build();
