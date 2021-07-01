@@ -44,7 +44,7 @@ class TwtRequestControllerRxTest {
         String inputJson = reader.lines().collect(Collectors.joining("\n"));
 
         //when
-        webTestClient.method(HttpMethod.POST).uri("/twtrip")
+        webTestClient.method(HttpMethod.POST).uri("/route/v1/tsptw/request")
             .contentType(MediaType.APPLICATION_JSON)
             .body(Mono.just(inputJson), String.class)
             .exchange()
@@ -64,7 +64,7 @@ class TwtRequestControllerRxTest {
         inputJson = reader.lines().collect(Collectors.joining("\n"));
 
         //when
-        webTestClient.method(HttpMethod.POST).uri("/twtrip")
+        webTestClient.method(HttpMethod.POST).uri("/route/v1/tsptw/request")
             .contentType(MediaType.APPLICATION_JSON)
             .body(Mono.just(inputJson), String.class)
             .exchange()

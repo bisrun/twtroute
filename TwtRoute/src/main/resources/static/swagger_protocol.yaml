@@ -1,383 +1,535 @@
 swagger: '2.0'
 info:
-  description: TSPTW route server
-  version: 0.1.7
-  title: TSPTW Route Server
-  termsOfService: 'http://127.0.0.1/'
-  contact:
-    email: flywhale@mappers.kr
-  license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    description: TSPTW route server
+    version: 0.2.1
+    title: TSPTW Route Server
+    termsOfService: 'http://127.0.0.1/'
+    contact:
+        email: flywhale@mappers.kr
+    license:
+        name: Apache 2.0
+        url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 host: '192.168.6.45:8088'
 basePath: /
 schemes:
-  - https
-  - http
+    - https
+    - http
 paths:
-  /twtrip:
-    post:
-      tags:
-        - TSPTW
-      summary: TSP with time windows
-      description: ' '
-      operationId: ' '
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: auth_id
-          in: header
-          required: true
-          type: string
-          description: 'company id, this id is given by mappers.'
-        - name: device_id
-          in: header
-          required: true
-          type: string
-          description: >-
-            Each device has a unique device_id, device_id cannot be used at the
-            same time.
-        - in: body
-          name: requestJson
-          description: requestJson
-          required: true
-          schema:
-            $ref: '#/definitions/requestJson'
-      responses:
-        '200':
-          description: successful operation
-          headers:
-            X-Rate-Limit:
-              type: integer
-              format: int32
-              description: Your current daily credit limit.
-            X-Rate-Remaining:
-              type: integer
-              format: int32
-              description: Your remaining credits until the reset.
-            X-Rate-Reset:
-              type: integer
-              format: int32
-              description: >-
-                The number of seconds that you have to wait before a reset of
-                the credit count is done.
-            X-Expires-After:
-              type: string
-              format: date-time
-              description: 'date time when token expires, ex:2021-04-12T23:59:59.00Z'
-          schema:
-            $ref: '#/definitions/responseJson'
-        '400':
-          description: Error occured when reading the request. Request is invaild
-          schema:
-            $ref: '#/definitions/errorResponse'
-        '500':
-          description: Error occured on server side
-          schema:
-            $ref: '#/definitions/errorResponse'
+    /route/{api_version}/tsptw/request:
+        post:
+            tags:
+                - Request tsptw job (Blocking mode)
+            summary: TSP with time windows
+            description: ' '
+            operationId: 'getTsptwJobSolutionB'
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - name: api_version
+                  in: path
+                  type: string
+                  required: true
+                  description: 'api version'
+                - name: auth_id
+                  in: query
+                  required: true
+                  type: string
+                  description: 'authentification id, this id is given by mappers.'
+                - name: device_id
+                  in: query
+                  required: true
+                  type: string
+                  description: >-
+                      Each device has a unique device_id, device_id cannot be used at the
+                      same time.
+                - in: body
+                  name: requestJson
+                  description: requestJson
+                  required: true
+                  schema:
+                      $ref: '#/definitions/requestJson'
+            responses:
+                '200':
+                    description: successful operation
+                    headers:
+                        X-Rate-Limit:
+                            type: integer
+                            format: int32
+                            description: Your current daily credit limit.
+                        X-Rate-Remaining:
+                            type: integer
+                            format: int32
+                            description: Your remaining credits until the reset.
+                        X-Rate-Reset:
+                            type: integer
+                            format: int32
+                            description: >-
+                                The number of seconds that you have to wait before a reset of
+                                the credit count is done.
+                        X-Expires-After:
+                            type: string
+                            format: date-time
+                            description: 'date time when token expires, ex:2021-04-12T23:59:59.00Z'
+                    schema:
+                        $ref: '#/definitions/responseJson'
+                '400':
+                    description: Error occured when reading the request. Request is invaild
+                    schema:
+                        $ref: '#/definitions/errorResponse'
+                '500':
+                    description: Error occured on server side
+                    schema:
+                        $ref: '#/definitions/errorResponse'
+    /route/{api_version}/tsptw/registjob:
+        post:
+            tags:
+                - Regist tsptw Job (Nonblocking mode, step1)
+            summary: TSP with time windows
+            description: ' '
+            operationId: 'registTsptwJob'
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - name: api_version
+                  in: path
+                  type: string
+                  required: true
+                  description: 'api version'
+                - name: auth_id
+                  in: query
+                  required: true
+                  type: string
+                  description: 'authentification id, this id is given by mappers.'
+                - name: device_id
+                  in: query
+                  required: true
+                  type: string
+                  description: >-
+                      Each device has a unique device_id, device_id cannot be used at the
+                      same time.
+                - in: body
+                  name: requestJson
+                  description: requestJson
+                  required: true
+                  schema:
+                      $ref: '#/definitions/requestJson'
+            responses:
+                '200':
+                    description: successful operation
+                    headers:
+                        X-Rate-Limit:
+                            type: integer
+                            format: int32
+                            description: Your current daily credit limit.
+                        X-Rate-Remaining:
+                            type: integer
+                            format: int32
+                            description: Your remaining credits until the reset.
+                        X-Rate-Reset:
+                            type: integer
+                            format: int32
+                            description: >-
+                                The number of seconds that you have to wait before a reset of
+                                the credit count is done.
+                        X-Expires-After:
+                            type: string
+                            format: date-time
+                            description: 'date time when token expires, ex:2021-04-12T23:59:59.00Z'
+                    schema:
+                        $ref: '#/definitions/responseRegJson'
+                '400':
+                    description: Error occured when reading the request. Request is invaild
+                    schema:
+                        $ref: '#/definitions/errorResponse'
+                '500':
+                    description: Error occured on server side
+                    schema:
+                        $ref: '#/definitions/errorResponse'
+    /route/{api_version}/tsptw/solution/{job_id}:
+        get:
+            tags:
+                - Get the solution from Jobid (Nonblocking mode, step2)
+            summary: TSP with time windows
+            description: ' '
+            operationId: 'getTsptwJobSolutionN'
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - name: api_version
+                  in: path
+                  type: string
+                  required: true
+                  description: 'api version'
+                - name: job_id
+                  in: path
+                  type: string
+                  required: true
+                  description: 'job_id'
+                - name: auth_id
+                  in: query
+                  required: true
+                  type: string
+                  description: 'authentification id, this id is given by mappers.'
+                - name: device_id
+                  in: query
+                  required: true
+                  type: string
+                  description: >-
+                      Each device has a unique device_id, device_id cannot be used at the
+                      same time.
+
+            responses:
+                '200':
+                    description: successful operation
+                    headers:
+                        X-Rate-Limit:
+                            type: integer
+                            format: int32
+                            description: Your current daily credit limit.
+                        X-Rate-Remaining:
+                            type: integer
+                            format: int32
+                            description: Your remaining credits until the reset.
+                        X-Rate-Reset:
+                            type: integer
+                            format: int32
+                            description: >-
+                                The number of seconds that you have to wait before a reset of
+                                the credit count is done.
+                        X-Expires-After:
+                            type: string
+                            format: date-time
+                            description: 'date time when token expires, ex:2021-04-12T23:59:59.00Z'
+                    schema:
+                        $ref: '#/definitions/responseJson'
+                '400':
+                    description: Error occured when reading the request. Request is invaild
+                    schema:
+                        $ref: '#/definitions/errorResponse'
+                '500':
+                    description: Error occured on server side
+                    schema:
+                        $ref: '#/definitions/errorResponse'
 definitions:
-  requestJson:
-    type: object
-    properties:
-      protocol_ver:
-        type: string
-        description: '#.#.#'
-      options:
-        $ref: '#/definitions/options'
-      vehicle:
-        $ref: '#/definitions/vehicle'
-      services:
-        $ref: '#/definitions/services'
-  responseJson:
-    type: object
-    properties:
-      job_id:
-        type: string
-        description: ' '
-      processing_time:
-        type: number
-        description: 'unit:ms, request->process->response'
-      status:
-        type: string
-        description: ' '
-        enum:
-          - Ok
-          - Unassigned
-      solution:
-        $ref: '#/definitions/solution'
+    requestJson:
+        type: object
+        properties:
+            protocol_ver:
+                type: string
+                description: '#.#.#'
+            options:
+                $ref: '#/definitions/options'
+            vehicle:
+                $ref: '#/definitions/vehicle'
+            services:
+                $ref: '#/definitions/services'
+    responseJson:
+        type: object
+        properties:
+            job_id:
+                type: string
+                description: ' '
+            processing_time:
+                type: number
+                description: 'unit:ms, request->process->response'
+            status:
+                type: string
+                description: ' '
+                enum:
+                    - Ok
+                    - Unassigned
+            solution:
+                $ref: '#/definitions/solution'
+    responseRegJson:
+        type: object
+        properties:
+            job_id:
+                type: string
+                description: ' '
+            reg_job_time:
+                type: string
+                description: 'the time to assgin job in queue, ex:2021-04-12T23:59:59.00Z'
+            status:
+                type: string
+                description: ' '
+                enum:
+                    - Ok
+    options:
+        type: object
+        properties:
+            service_time:
+                type: number
+                description: 'default spend time in waypoint, unit:second'
+            req_route_geom:
+                type: boolean
+                default: false
+                description: 'to request route shape geometry, false=do not request, true=request'
+            req_debuginfo:
+                type: boolean
+                default: false
+                description: >-
+                    to request debug infomation, this field can be removed, Never use this
+                    field after service.
+            keep_entry_angle:
+                type: boolean
+                default: false
+                description: >-
+                    keep the angle of entry when departing for the next waypoint. > if
+                    service(task) has a keep_entry_angle field, then the field is applied
+    vehicle:
+        type: object
+        required:
+            - vehicle_id
+            - start_task_id
+            - end_task_id
+        properties:
+            driver_id:
+                type: string
+                description: driver name
+            vehicle_id:
+                type: string
+                description: vehicle id
+            vehicle_type:
+                type: string
+                description: vehicle type
+            start_task_id:
+                type: string
+                description: start position id of services
+            end_task_id:
+                type: string
+                description: end position id of services
+            start_time:
+                type: number
+                default: 32400
+                description: 'job start time, 32400="09:00"'
+            end_time:
+                type: number
+                default: 64800
+                description: 'job end time, ex 64800="18:00"'
+    service:
+        type: object
+        required:
+            - task_id
+            - loc_coord
+        properties:
+            task_id:
+                type: string
+                description: task_id should be uniqued in services
+            name:
+                type: string
+                description: name
+            loc_coord:
+                $ref: '#/definitions/coordinate'
+            dir_angle:
+                type: integer
+                description: >-
+                    The angle at which this point is used as the destination,  north = 0,
+                    clockwise [0~359], > If there is no field or value is -1, the server
+                    chooses the nearest lane and direction to the loc_coord.
+            keep_entry_angle:
+                type: boolean
+                default: false
+                description: keep the angle of entry when departing for the next waypoint.
+            time_window:
+                type: array
+                description: 'time windows [start time , end time ]  ex :[32400, 36000] unit:second'
+                items:
+                    type: number
+            service_time:
+                type: number
+                description: 'spend time in waypoint [unit second]'
+    services:
+        type: array
+        description: servicies
+        items:
+            $ref: '#/definitions/service'
+    coordinate:
+        type: array
+        description: 'coord system:wgs84, ex: [127.1234567, 37.1234567] '
+        items:
+            type: number
+    geometry:
+        type: object
+        properties:
+            coordinates:
+                type: array
+                description: line geometry
+                items:
+                    $ref: '#/definitions/coordinate'
+    activity:
+        type: object
+        required:
+            - task_id
+            - loc_coord
+            - duration
+            - distance
+            - req_task_index
+            - task_order
+            - arrival_time
+            - end_time
+        properties:
+            task_id:
+                type: string
+                description: ' '
+            task_type:
+                type: string
+                enum:
+                    - start
+                    - end
+                    - delivery
+                    - service
+            loc_coord:
+                $ref: '#/definitions/coordinate'
+            loc_name:
+                type: string
+                format: byte
+                description: ' '
+            duration:
+                type: number
+                description: 'unit:second'
+            distance:
+                type: number
+                description: 'unit:meter'
+            req_task_index:
+                type: integer
+                description: ' '
+            task_order:
+                type: integer
+                description: visit order
+            arrival_time:
+                type: number
+                description: 'unit:second  if task_type is start then this field is invalid'
+            end_time:
+                type: number
+                description: 'unit:second if task_type is end then this field is invalid'
+            time_window:
+                type: array
+                description: 'time windows [start time , end time ]  ex :[32400, 36000] unit:second'
+                items:
+                    type: number
+            geometry:
+                $ref: '#/definitions/geometry'
+            debug:
+                $ref: '#/definitions/debug_activity'
 
-  options:
-    type: object
-    properties:
-      service_time:
-        type: number
-        description: 'default spend time in waypoint, unit:second'
-      req_route_geom:
-        type: boolean
-        default: false
-        description: 'to request route shape geometry, false=do not request, true=request'
-      req_debuginfo:
-        type: boolean
-        default: false
-        description: >-
-          to request debug infomation, this field can be removed, Never use this
-          field after service.
-      keep_entry_angle:
-        type: boolean
-        default: false
-        description: >-
-          keep the angle of entry when departing for the next waypoint. > if
-          service(task) has a keep_entry_angle field, then the field is applied
-  vehicle:
-    type: object
-    required:
-      - vehicle_id
-      - start_task_id
-      - end_task_id
-    properties:
-      driver_id:
-        type: string
-        description: driver name
-      vehicle_id:
-        type: string
-        description: vehicle id
-      vehicle_type:
-        type: string
-        description: vehicle type
-      start_task_id:
-        type: string
-        description: start position id of services
-      end_task_id:
-        type: string
-        description: end position id of services
-      start_time:
-        type: number
-        default: 32400
-        description: 'job start time, 32400="09:00"'
-      end_time:
-        type: number
-        default: 64800
-        description: 'job end time, ex 64800="18:00"'
-  service:
-    type: object
-    required:
-      - task_id
-      - loc_coord
-    properties:
-      task_id:
-        type: string
-        description: task_id should be uniqued in services
-      name:
-        type: string
-        description: name
-      loc_coord:
-        $ref: '#/definitions/coordinate'
-      dir_angle:
-        type: integer
-        description: >-
-          The angle at which this point is used as the destination,  north = 0,
-          clockwise [0~359], > If there is no field or value is -1, the server
-          chooses the nearest lane and direction to the loc_coord.
-      keep_entry_angle:
-        type: boolean
-        default: false
-        description: keep the angle of entry when departing for the next waypoint.
-      time_window:
-        type: array
-        description: 'time windows [start time , end time ]  ex :[32400, 36000] unit:second'
-        items:
-          type: number
-      service_time:
-        type: number
-        description: 'spend time in waypoint [unit second]'
-  services:
-    type: array
-    description: servicies
-    items:
-      $ref: '#/definitions/service'
-  coordinate:
-    type: array
-    description: 'coord system:wgs84, ex: [127.1234567, 37.1234567] '
-    items:
-      type: number
-  geometry:
-    type: object
-    properties:
-      coordinates:
-        type: array
-        description: line geometry
-        items:
-          $ref: '#/definitions/coordinate'
-  activity:
-    type: object
-    required:
-      - task_id
-      - loc_coord
-      - duration
-      - distance
-      - req_task_index
-      - task_order
-      - arrival_time
-      - end_time
-    properties:
-      task_id:
-        type: string
+    route:
+        type: object
         description: ' '
-      task_type:
-        type: string
-        enum:
-          - start
-          - end
-          - delivery
-          - service
-      loc_coord:
-        $ref: '#/definitions/coordinate'
-      loc_name:
-        type: string
-        format: byte
+        required:
+            - vehicle_id
+            - duration
+            - distance
+            - start_time
+            - end_time
+            - activities
+        properties:
+            vehicle_id:
+                type: string
+                description: ' '
+            distance:
+                type: number
+                description: ' unit:meter'
+            duration:
+                type: number
+                description: 'unit:second, expected time of spend'
+            start_time:
+                type: number
+                description: 'unit:second'
+            end_time:
+                type: number
+                description: 'unit:second'
+            activities:
+                $ref: '#/definitions/activity'
+            debug:
+                $ref: '#/definitions/debug_route'
+    unassigned_task:
+        type: object
+        properties:
+            task_id:
+                type: string
+            req_task_index:
+                type: integer
+                description: ' '
+            time_window:
+                type: array
+                description: 'time windows [start time , end time ]  ex :[32400, 36000] unit:second'
+                items:
+                    type: number
+    solution:
+        type: object
+        properties:
+            routes:
+                type: array
+                description: ' '
+                items:
+                    $ref: '#/definitions/route'
+            unassigned:
+                type: array
+                description: ' '
+                items:
+                    $ref: '#/definitions/unassigned_task'
+    errorResponse:
+        type: object
+        properties:
+            code:
+                type: integer
+                description: detail error code
+            message:
+                type: string
+                description: error cause
+    debug_route:
+        type: object
         description: ' '
-      duration:
-        type: number
-        description: 'unit:second'
-      distance:
-        type: number
-        description: 'unit:meter'
-      req_task_index:
-        type: integer
+        properties:
+            arrival_time_hm:
+                type: string
+                description: 'HH:MM'
+            end_time_hm:
+                type: string
+                description: 'HH:MM'
+            weight:
+                type: number
+                description: ' '
+            transport_time:
+                type: number
+                description: ' '
+            service_duration:
+                type: number
+                description: service time on waypoint
+            waiting_time:
+                type: number
+                description: service time on waypoint
+            total_duration:
+                type: number
+                description: transport_time+service_duration+waiting_time
+    debug_activity:
+        type: object
         description: ' '
-      task_order:
-        type: integer
-        description: visit order
-      arrival_time:
-        type: number
-        description: 'unit:second  if task_type is start then this field is invalid'
-      end_time:
-        type: number
-        description: 'unit:second if task_type is end then this field is invalid'
-      time_window:
-        type: array
-        description: 'time windows [start time , end time ]  ex :[32400, 36000] unit:second'
-        items:
-          type: number
-      geometry:
-        $ref: '#/definitions/geometry'
-      debug:
-        $ref: '#/definitions/debug_activity'
-
-  route:
-    type: object
-    description: ' '
-    required:
-      - vehicle_id
-      - duration
-      - distance
-      - start_time
-      - end_time
-      - activities
-    properties:
-      vehicle_id:
-        type: string
-        description: ' '
-      distance:
-        type: number
-        description: ' unit:meter'
-      duration:
-        type: number
-        description: 'unit:second, expected time of spend'
-      start_time:
-        type: number
-        description: 'unit:second'
-      end_time:
-        type: number
-        description: 'unit:second'
-      activities:
-        $ref: '#/definitions/activity'
-      debug:
-        $ref: '#/definitions/debug_route'
-  unassigned_task:
-    type: object
-    properties:
-      task_id:
-        type: string
-      req_task_index:
-        type: integer
-        description: ' '
-      time_window:
-        type: array
-        description: 'time windows [start time , end time ]  ex :[32400, 36000] unit:second'
-        items:
-          type: number
-  solution:
-    type: object
-    properties:
-      routes:
-        type: array
-        description: ' '
-        items:
-          $ref: '#/definitions/route'
-      unassigned:
-        type: array
-        description: ' '
-        items:
-          $ref: '#/definitions/unassigned_task'
-  errorResponse:
-    type: object
-    properties:
-      code:
-        type: integer
-        description: detail error code
-      message:
-        type: string
-        description: error cause
-  debug_route:
-    type: object
-    description: ' '
-    properties:
-      arrival_time_hm:
-        type: string
-        description: 'HH:MM'
-      end_time_hm:
-        type: string
-        description: 'HH:MM'
-      weight:
-        type: number
-        description: ' '
-      transport_time:
-        type: number
-        description: ' '
-      service_duration:
-        type: number
-        description: service time on waypoint
-      waiting_time:
-        type: number
-        description: service time on waypoint
-      total_duration:
-        type: number
-        description: transport_time+service_duration+waiting_time
-  debug_activity:
-    type: object
-    description: ' '
-    properties:
-      arrival_time_hm:
-        type: string
-        description: 'HH:MM'
-      end_time_hm:
-        type: string
-        description: 'HH:MM'
-      weight:
-        type: number
-        description: ' '
-      transport_time:
-        type: number
-        description: ' '
-      service_duration:
-        type: number
-        description: service time on waypoint
-      waiting_time:
-        type: number
-        description: service time on waypoint
-      total_duration:
-        type: number
-        description: transport_time+service_duration+waiting_time
+        properties:
+            arrival_time_hm:
+                type: string
+                description: 'HH:MM'
+            end_time_hm:
+                type: string
+                description: 'HH:MM'
+            weight:
+                type: number
+                description: ' '
+            transport_time:
+                type: number
+                description: ' '
+            service_duration:
+                type: number
+                description: service time on waypoint
+            waiting_time:
+                type: number
+                description: service time on waypoint
+            total_duration:
+                type: number
+                description: transport_time+service_duration+waiting_time
