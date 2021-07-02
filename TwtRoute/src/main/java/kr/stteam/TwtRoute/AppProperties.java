@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 @Component
-@ConfigurationProperties("twt")
+@ConfigurationProperties(prefix = "twt")
 @Validated
 
 public class AppProperties {

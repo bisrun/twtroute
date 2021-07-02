@@ -32,7 +32,8 @@ public class TwtRequestController {
      * @return
      */
     @PostMapping("/route/{api_version}/tsptw/request")
-    public TwtResponse_Base getTsptwJobSolutionB(@RequestBody String fullJson){
+    public TwtResponse_Base getTsptwJobSolutionB(@RequestBody String fullJson,
+                                                 @PathVariable("api_version") String version){
         TwtRequest_Base request = TwtRequestParameter.parseParam(fullJson);
 
         ArrayList<TwtTaskItem> tasklist = new ArrayList<TwtTaskItem>();
