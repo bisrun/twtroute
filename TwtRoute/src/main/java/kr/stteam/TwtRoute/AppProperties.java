@@ -13,6 +13,8 @@ public class AppProperties {
     private String osrmServerIp;
     private String osrmServerPort;
     private String osrmServerIpPort;
+    private String tsptwServerPort;
+
 
     public int getMaxProcessTime() {
         return maxProcessTime;
@@ -44,5 +46,13 @@ public class AppProperties {
 
     public void setOsrmServerIpPort(String osrmServerIpPort) {
         this.osrmServerIpPort = osrmServerIpPort;
+    }
+
+    public String getTsptwServerPort() {
+        return tsptwServerPort;
+    }
+
+    public void setTsptwServerPort(String tsptwServerPort) {
+        this.tsptwServerPort = tsptwServerPort;
     }
 }

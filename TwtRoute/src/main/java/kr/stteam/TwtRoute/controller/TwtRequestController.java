@@ -1,27 +1,27 @@
 package kr.stteam.TwtRoute.controller;
 
-import kr.stteam.TwtRoute.domain.TwtTaskItem;
-import kr.stteam.TwtRoute.protocol.TwtRequest_Base;
-import kr.stteam.TwtRoute.protocol.TwtRequest_Service;
-import kr.stteam.TwtRoute.protocol.TwtResponseS1_Base;
-import kr.stteam.TwtRoute.protocol.TwtResponse_Base;
-import kr.stteam.TwtRoute.service.TwtService;
-import kr.stteam.TwtRoute.util.UtilCommon;
+import kr.stteam.TwtRoute.domain.TwtJobDesc;
+import kr.stteam.TwtRoute.protocol.*;
+import kr.stteam.TwtRoute.service.*;
+import kr.stteam.TwtRoute.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import org.springframework.core.task.TaskRejectedException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 @RestController
+//@RequestMapping(path = "/route/{api_version}/tsptw")
 public class TwtRequestController {
 
-    private final TwtService twtService;
-
     @Autowired
-    public TwtRequestController(TwtService twtService){this.twtService = twtService;}
+    private AsyncTask asyncTask;
 
+    /** AsyncConfig */
+    @Resource(name = "asyncConfig")
+    private AsyncConfig asyncConfig;
 
     /**
      * bloking mode, get tsptw result funtion
@@ -34,28 +34,107 @@ public class TwtRequestController {
     @PostMapping("/route/{api_version}/tsptw/request")
     public TwtResponse_Base getTsptwJobSolutionB(@RequestBody String fullJson,
                                                  @PathVariable("api_version") String version){
-        TwtRequest_Base request = TwtRequestParameter.parseParam(fullJson);
+        //TwtRequest_Tsptw request = TwtRequestMapper.parseParam(fullJson);
+        TwtJobDesc jobDesc = TwtJobDesc.create(fullJson);
+        TwtResponse_Base result = null;
+        try {
+            // 등록 가능 여부 체크
+            if (asyncConfig.isTaskExecute()) {
+                result = asyncTask.procRequestTask(jobDesc);
+            } else {
+                System.out.println("==============>>>>>>>>>>>> THREAD 개수 초과");
+            }
+        } catch (TaskRejectedException e) {
+            // TaskRejectedException : 개수 초과시 발생
+            System.out.println("==============>>>>>>>>>>>> THREAD ERROR");
+            System.out.println("TaskRejectedException : 등록 개수 초과");
+            System.out.println("==============>>>>>>>>>>>> THREAD END");
+        }
 
-        ArrayList<TwtTaskItem> tasklist = new ArrayList<TwtTaskItem>();
-        setJobList(tasklist, request);
-        TwtResponse_Base result = twtService.procTwt(tasklist, request);
-        return result ;
+        if(result == null){
+            result = new TwtResponse_Error(TwtResponse_Base.StatusType.Fail, Constants.Msg_Err1);
+        }
+
+        return result;
     }
 
 
     @PostMapping("/route/{api_version}/tsptw/registjob")
-    public TwtResponseS1_Base registTsptwJob(@RequestBody String fullJson,
+    public TwtResponse_Base registTsptwJob(@RequestBody String fullJson,
                                               @PathVariable("api_version") String version,
                                               @RequestParam(value = "auth_id", required = true) String auth_id,
-                                              @RequestParam(value = "device_id", required = true) String device_id){
-        TwtRequest_Base request = TwtRequestParameter.parseParam(fullJson);
+                                              @RequestParam(value = "device_id", required = true) String device_id) throws IOException {
 
-        ArrayList<TwtTaskItem> tasklist = new ArrayList<TwtTaskItem>();
-        setJobList(tasklist, request);
+        //TwtRequest_Tsptw request = TwtRequestMapper.parseParam(fullJson);
+        TwtJobDesc jobDesc = TwtJobDesc.create(fullJson);
 
-        // 개발해야함
-        return null ;
+        if (jobDesc == null) { //parsing fail 처리
+            return new TwtResponse_Error(TwtResponse_Base.StatusType.Fail, Constants.Msg_Err0);
+        }
+        if (jobDesc.requestParam == null) { //parsing fail 처리
+            return new TwtResponse_Error(TwtResponse_Base.StatusType.Fail, Constants.Msg_Err0);
+        }
+
+        TwtResponse_Base result = null;
+        try {
+            // 등록 가능 여부 체크
+            if (asyncConfig.isTaskExecute()) {
+                //비동기 함수지만, assign result (특히 jobId)를 리턴해줘야 되므로
+                //여기선 그냥 get을 사용하여 비동기를 무시하고 결과를 받아온다.
+                //대신 결과에 대한 result의 db insert는 비동기로 진행한다.
+                result = asyncTask.assignJob(jobDesc.requestParam).get();
+
+                if(result != null){
+                    asyncTask.SetResponseToDB((TwtResponse_forAssignJob) result, Constants.Msg_Process_Ing);
+
+                    //twtRoute 작업을 지시한다
+                    asyncTask.procTwtTask(jobDesc).addCallback((twtRouteResult) -> {
+                        //완성된 결과를 DB에 삽입한다.
+                        asyncTask.SetResponseToDB((TwtResponse_Tsptw)twtRouteResult, Constants.Msg_Process_Done);
+
+                    }, (e) -> {
+                        e.printStackTrace();
+                    });;
+
+                }
+            } else {
+                System.out.println("==============>>>>>>>>>>>> THREAD 개수 초과");
+            }
+        } catch (TaskRejectedException e) {
+            // TaskRejectedException : 개수 초과시 발생
+            System.out.println("==============>>>>>>>>>>>> THREAD ERROR");
+            System.out.println("TaskRejectedException : 등록 개수 초과");
+            System.out.println("==============>>>>>>>>>>>> THREAD END");
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(result == null){
+            result = new TwtResponse_Error(TwtResponse_Base.StatusType.Fail, Constants.Msg_Err1);;
+	    }
+	    return result;
     }
+
+    @GetMapping("/route/{api_version}/tsptw/print")
+    public TwtResponse_Base twTripPrintStoreSolution(){
+        try {
+            // 등록 가능 여부 체크
+            if (asyncConfig.isTaskExecute()) {
+                asyncTask.PrintResponseDB();
+            } else {
+                System.out.println("==============>>>>>>>>>>>> THREAD 개수 초과");
+            }
+        } catch (TaskRejectedException e) {
+            // TaskRejectedException : 개수 초과시 발생
+            System.out.println("==============>>>>>>>>>>>> THREAD ERROR");
+            System.out.println("TaskRejectedException : 등록 개수 초과");
+            System.out.println("==============>>>>>>>>>>>> THREAD END");
+        }
+        return new TwtResponse_Error(TwtResponse_Base.StatusType.Ok, "Test Print Method");
+    }
+
 
     @GetMapping("/route/{api_version}/tsptw/solution/{job_id}")
     public TwtResponse_Base getTsptwJobSolutionN( @PathVariable("api_version") String version,
@@ -63,30 +142,32 @@ public class TwtRequestController {
                   @RequestParam(value = "auth_id", required = true) String auth_id,
                   @RequestParam(value = "device_id", required = true) String device_id){
         // 개발해야함
-        return null ;
-    }
+        TwtResponse_Base result = null;
 
-    private void setJobList(ArrayList<TwtTaskItem> tasklist, TwtRequest_Base request) {
-        int index = 0;
-        for(TwtRequest_Service item : request.getServices() ){
-            TwtTaskItem task = new TwtTaskItem();
-            task.task_id = item.getTask_id();
-            task.x = item.getLoc_coord().get(0);
-            task.y = item.getLoc_coord().get(1);
-            task.tm_service = item.getService_time();
-            task.index = index;
-            task.poi_name = item.getName();
-            if( item.getTime_window() != null)
-            {
-                // 문자열 parsing 시에 exception throw해야함.
-                task.tw_req_start = item.getTime_window().get(0);
-                task.tw_req_end =  item.getTime_window().get(1);
-                task.tw_req = 1;
+        try {
+            // 등록 가능 여부 체크
+            if (asyncConfig.isTaskExecute()) {
+
+                result = asyncTask.GetResponseFromDB(job_id).get();
+
+                if(result == null){
+                    result = new TwtResponse_Error(TwtResponse_Base.StatusType.Fail, Constants.Msg_Err2);;
+                }
             }
-            tasklist.add(task);
-            index ++ ;
-
+        } catch (TaskRejectedException e) {
+            // TaskRejectedException : 개수 초과시 발생
+            System.out.println("==============>>>>>>>>>>>> THREAD ERROR");
+            System.out.println("TaskRejectedException : 등록 개수 초과");
+            System.out.println("==============>>>>>>>>>>>> THREAD END");
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-    }
 
+        if(result == null){
+            result = new TwtResponse_Error(TwtResponse_Base.StatusType.Fail, Constants.Msg_Err1);;
+        }
+        return result;
+    }
 }

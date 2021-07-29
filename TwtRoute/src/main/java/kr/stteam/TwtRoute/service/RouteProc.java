@@ -1,12 +1,11 @@
 package kr.stteam.TwtRoute.service;
 
-import kr.stteam.TwtRoute.controller.TwtResult;
-import kr.stteam.TwtRoute.protocol.OsrmTripMatrixResponseParam;
+import kr.stteam.TwtRoute.domain.TwtJobDesc;
 
 public interface RouteProc {
     String requestTripMatrix(StringBuffer viaInfo);
-    boolean setTripMatrixInResult(String responseJson, TwtResult TwtResult);
+    boolean setTripMatrixInResult(String responseJson, TwtJobDesc TwtJobDesc);
 
-    String requestRouteGeometry(TwtResult twtResult);
-    boolean setRouteGeometryInResult(String responseJson,TwtResult twtResult);
+    String requestRouteGeometry(TwtJobDesc twtJobDesc);
+    boolean setRouteGeometryInResult(String responseJson, TwtJobDesc twtJobDesc);
 }

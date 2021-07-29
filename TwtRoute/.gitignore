@@ -33,11 +33,6 @@ build/
 .vscode/
 
 ### ETC ###
-mvnw
-mvnw.cmd
-maven-wrapper.jar
-maven-wrapper.properties
-MavenWrapperDownloader.java
 application.properties
-
-
+*.log
+/log/

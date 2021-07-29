@@ -1,10 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+<configuration scan="true" scanPeriod="5 seconds" debug="false">
+
+    <!-- Console log -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+
+    <!-- JVM 변수 등록 => -DBASE_LOG_DIR="/your/path" -->
+    <property name="LOG_DIR" value="${BASE_LOG_DIR}"/>
+
+    <!-- name = appender 에서 참조 할 파일 경로의 심볼릭 값 -->
+    <!-- value = 실제 로그 파일 경로 -->
+    <property name="LOG_PATH_TEMPLATE" value="${LOG_DIR}/Template.log"/>
+
+    <!-- MY ROOT LOG -->
+    <property name="LOG_PATH_TSPTW_ROOT" value="${LOG_DIR}/TSPTW.log"/>
+
+    <!-- appender name 은 밑에서 logger 가 참조할 때 사용 할 이름 -->
+    <!-- 아래 템플릿을 복사하여 -->
+    <!-- name / <file> / <fileNamePattern> -->
+    <!-- tag 에 해당 하는 value 만 수정 -->
+    spring.profiles.active=local
+
+    <!-- Appender template  -->
+    <appender name="TEMPLATE_LOG_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH_TEMPLATE}</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOG_PATH_TEMPLATE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 50MB -->
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>1</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="TSPTW_ROOT_LOG_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH_TSPTW_ROOT}</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOG_PATH_TSPTW_ROOT}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 50MB -->
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 자바에서 logger 를 얻을 때에는 -->
+    <!-- name 에 설정 된 문자열을 통해서 logger 를 가져오고 -->
+    <!-- 그 logger 에 실제 구현체는 ref 에 명시 된 이름을 갖는 appender 이다. -->
+    <!-- 아래 템플릿을 복사 후 -->
+    <!-- name 과 ref 를 변경할 것 -->
+
+    <!-- Access key -->
+    <!--
+    <logger name="TEMPLATE" level="INFO">
+        <appender-ref ref="TEMPLATE_LOG_FILE"/>
+    </logger>
+    -->
+    <logger name="TSPTW_ROOT" level="INFO">
+        <appender-ref ref="TSPTW_ROOT_LOG_FILE"/>
+    </logger>
+
+
+    <!-- Console log -->
     <root level="INFO">
-        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="TSPTW_ROOT_LOG_FILE"/>
     </root>
 
-    <logger name="kr.stteam" level="DEBUG"/>
 </configuration>

@@ -1,8 +1,7 @@
 package kr.stteam.TwtRoute.service;
 
 import kr.stteam.TwtRoute.AppProperties;
-import kr.stteam.TwtRoute.controller.TwtResult;
-import org.junit.jupiter.api.BeforeAll;
+import kr.stteam.TwtRoute.domain.TwtJobDesc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +27,7 @@ class RouteProcOSRMTestMock {
     private RouteProcOSRM routeProc;
 
     @MockBean
-    TwtResult mockTwtResult;
+    TwtJobDesc mockTwtJobDesc;
 
     @Autowired
     //@MockBean
@@ -70,8 +69,8 @@ class RouteProcOSRMTestMock {
         String viaPoint = "127.1145019,37.5086800;127.1162522,37.5078703;127.1128161,37.4993756;127.1078362,37.5053189;127.1121007,37.5098758;127.1145019,37.5086800";
 
         //when
-        when(mockTwtResult.GetOrderedWaypoint()).thenReturn(viaPoint);
-        String responseJson = routeProc.requestRouteGeometry(mockTwtResult);
+        when(mockTwtJobDesc.GetOrderedWaypoint()).thenReturn(viaPoint);
+        String responseJson = routeProc.requestRouteGeometry(mockTwtJobDesc);
 
         //then
         assertThat(responseJson).contains("\"code\":\"Ok\"");

@@ -130,7 +130,7 @@ public class VehicleTypeImpl implements VehicleType {
          */
         private double fixedCost = 0.0;
         private double perDistance = 0.1;//[by hsb] ori =1.0
-        private double perTime = 1.0; //[by hsb] ori=0,0
+        private double perTime = 1.0; //[by hsb] ori=0.0
         private double perWaitingTime = 0.0;
         private double perServiceTime = 0.0;
 

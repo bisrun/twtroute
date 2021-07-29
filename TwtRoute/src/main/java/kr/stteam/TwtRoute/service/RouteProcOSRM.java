@@ -3,7 +3,7 @@ package kr.stteam.TwtRoute.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.stteam.TwtRoute.AppProperties;
-import kr.stteam.TwtRoute.controller.TwtResult;
+import kr.stteam.TwtRoute.domain.TwtJobDesc;
 import kr.stteam.TwtRoute.protocol.*;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -14,10 +14,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import scala.App;
 
 import java.util.ArrayList;
 
@@ -66,7 +63,7 @@ public class RouteProcOSRM implements RouteProc{
     }
 
     @Override
-    public boolean setTripMatrixInResult(String responseJson, TwtResult twtResult) {
+    public boolean setTripMatrixInResult(String responseJson, TwtJobDesc twtJobDesc) {
         ObjectMapper mapper = new ObjectMapper();
         OsrmTripMatrixResponseParam tripMatrix = null;
         try {
@@ -83,17 +80,17 @@ public class RouteProcOSRM implements RouteProc{
             return false;
         }
         tripMatrix.setTaskCount(tripMatrix.getDurations().size());
-        twtResult.setTripMatrix(tripMatrix);
+        twtJobDesc.setTripMatrix(tripMatrix);
 
         return true;
     }
 
     @Override
-    public String requestRouteGeometry(TwtResult twtResult) {
+    public String requestRouteGeometry(TwtJobDesc twtJobDesc) {
         String body = null;
 
         StringBuffer requestUrl = new StringBuffer("http://" + appProperties.getOsrmServerIpPort()  + "/route/v1/car/");
-        requestUrl.append(twtResult.GetOrderedWaypoint());
+        requestUrl.append(twtJobDesc.GetOrderedWaypoint());
         requestUrl.append("?geometries=geojson&overview=full");
         // http://192.168.6.45:5500/route/v1/car/127.1162273,37.5168241;127.1143369,37.5088933;127.1015711,37.5138507?geometries=geojson
 
@@ -125,19 +122,19 @@ public class RouteProcOSRM implements RouteProc{
     }
 
     @Override
-    public boolean setRouteGeometryInResult(String responseJson,TwtResult twtResult) {
+    public boolean setRouteGeometryInResult(String responseJson, TwtJobDesc twtJobDesc) {
         int waypoint_idx = 0;
         int prev_waypoint_idx = 0;
         ObjectMapper mapper = new ObjectMapper();
         try {
-            twtResult.osrmRouteResponse = mapper.readValue(responseJson, OsrmRouteResponseParam_Base.class);
+            twtJobDesc.osrmRouteResponse = mapper.readValue(responseJson, OsrmRouteResponseParam_Base.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return false;
         }
 
-        ArrayList<double[]> coordinates = twtResult.osrmRouteResponse.getRoutes().get(0).getGeometry().getCoordinates();
-        ArrayList<OsrmRouteResponseParam_Waypoint> waypoints = twtResult.osrmRouteResponse.getWaypoints();
+        ArrayList<double[]> coordinates = twtJobDesc.osrmRouteResponse.getRoutes().get(0).getGeometry().getCoordinates();
+        ArrayList<OsrmRouteResponseParam_Waypoint> waypoints = twtJobDesc.osrmRouteResponse.getWaypoints();
 
         for (int vtx_loop = 0; vtx_loop < coordinates.size(); vtx_loop++) {
             if (coordinates.get(vtx_loop)[0] == waypoints.get(waypoint_idx).getLocation()[0] &&
@@ -166,7 +163,7 @@ public class RouteProcOSRM implements RouteProc{
             }
 
             TripGeometry geometry = new TripGeometry();
-            ArrayList<TwtResponse_RouteActivity> activities = twtResult.twtResponse.getSolution().getRoutes().get(0).getActivities();
+            ArrayList<TwtResponse_RouteActivity> activities = twtJobDesc.twtResponseTsptw.getSolution().getRoutes().get(0).getActivities();
 
             geometry.setCoordinates(linecoords);
             activities.get(route_order).setGeometry(geometry);

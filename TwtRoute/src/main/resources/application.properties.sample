@@ -1,11 +1,13 @@
 #twt
 twt.maxProcessTime=20
+twt.tsptwServerPort=8088
 
 #osrm server configuration
 #> 이중화 필요함.
 twt.osrmServerIp=192.168.6.45
 twt.osrmServerPort=20000
 twt.osrmServerIpPort=${twt.osrmServerIp}:${twt.osrmServerPort}
+
 
 #log color enabled
 spring.output.ansi.enabled=always
@@ -14,12 +16,10 @@ spring.output.ansi.enabled=always
 server.servlet.encoding.charset=UTF-8
 server.servlet.encoding.enabled=true
 server.servlet.encoding.force=true
-
-
 #server configuration
 server.port=8088
 
-
+#logging.config=classpath:logback-spring.xml
 #logging.file.path=d:/logs/
 #logging.file.name=${logging.file.path}myapp.log
 
@@ -27,3 +27,11 @@ server.port=8088
 #logging.level.kr.stteam.TwtRoute=DEBUG
 #logging.level.root
 #logging.level.org.springframework=INFO
+
+#frontend configuration
+internal.resource.url=/file/**
+#밑에 있는 설정은 동작 머신에 의존적.
+#디렉터리를 명시하는데 반드시 '/' 로 끝나야 함.
+#윈도우인 경우 '/C:/folder/data/' 로 작성해야함
+external.resource.path=/C:/folder/data/
+external.resource.url=file://${external.resource.path}
