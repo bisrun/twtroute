@@ -1,0 +1,1828 @@
+{
+	"protocol_ver": "0.1.7",
+	"vehicle": {
+		"driver": "hong",
+		"vehicleid": "car-0101",
+		"start_task_id": "0",
+		"end_task_id": "0",
+		"start_time": 32400,
+		"end_time": 64800
+	},
+	"options": {
+		"service_time": 60,
+		"req_route_geom": true,
+		"req_debuginfo": false,
+		"keep_entry_angle": false
+	},
+	"services": [
+		{
+			"task_id": "0",
+			"name": "맵퍼스",
+			"loc_coord": [
+				127.1145019,
+				37.50868
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "1",
+			"name": "원스탑",
+			"loc_coord": [
+				127.0830517,
+				37.5109328
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "2",
+			"name": "GS25",
+			"loc_coord": [
+				127.1248799,
+				37.5100345
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "3",
+			"name": "OK마트",
+			"loc_coord": [
+				127.1443234,
+				37.4937095
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "4",
+			"name": "CJ올리브영",
+			"loc_coord": [
+				127.0836049,
+				37.511383
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "5",
+			"name": "CU",
+			"loc_coord": [
+				127.0893479,
+				37.5033244
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "6",
+			"name": "CSPACE",
+			"loc_coord": [
+				127.0807896,
+				37.5053596
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "7",
+			"name": "CSPACE",
+			"loc_coord": [
+				127.108553,
+				37.517784
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "8",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1221905,
+				37.4965705
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "9",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.0981484,
+				37.5110816
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "10",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1177445,
+				37.4906024
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "11",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1264992,
+				37.4833793
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "12",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1337739,
+				37.4899787
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "13",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1217251,
+				37.5067767
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "14",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1243573,
+				37.5108489
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "15",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1055909,
+				37.5042495
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "16",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1051741,
+				37.509441
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "17",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.0938931,
+				37.5066718
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "18",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1073561,
+				37.5145232
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "19",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1189461,
+				37.5032024
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "20",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1157914,
+				37.5033511
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "21",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1321641,
+				37.5154666
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "22",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.0814114,
+				37.5064468
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "23",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.087473,
+				37.5081557
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "24",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1145974,
+				37.5297736
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "25",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.112011,
+				37.4900798
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "26",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1166726,
+				37.5283202
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "27",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1176091,
+				37.505825
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "28",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.09861,
+				37.5054492
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "29",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1113835,
+				37.5127238
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "30",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1076852,
+				37.5137614
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "31",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1092969,
+				37.5058421
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "32",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1013375,
+				37.5069751
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "33",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1142617,
+				37.5113658
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "34",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1134958,
+				37.5152492
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "35",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1116944,
+				37.5157432
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "36",
+			"name": "GS25",
+			"loc_coord": [
+				127.1169282,
+				37.4953155
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "37",
+			"name": "GS25",
+			"loc_coord": [
+				127.1348096,
+				37.4973792
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "38",
+			"name": "GS25",
+			"loc_coord": [
+				127.1229802,
+				37.5000381
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "39",
+			"name": "GS25",
+			"loc_coord": [
+				127.1247445,
+				37.4940089
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "40",
+			"name": "GS25",
+			"loc_coord": [
+				127.1178895,
+				37.4943236
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "41",
+			"name": "GS25",
+			"loc_coord": [
+				127.1084443,
+				37.5046119
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "42",
+			"name": "GS25",
+			"loc_coord": [
+				127.1207848,
+				37.4959125
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "43",
+			"name": "GS25",
+			"loc_coord": [
+				127.1118165,
+				37.5084876
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "44",
+			"name": "GS25",
+			"loc_coord": [
+				127.1417885,
+				37.4940929
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "45",
+			"name": "GS25",
+			"loc_coord": [
+				127.0841122,
+				37.5106734
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "46",
+			"name": "GS25",
+			"loc_coord": [
+				127.0821686,
+				37.5106696
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "47",
+			"name": "GS25",
+			"loc_coord": [
+				127.1153222,
+				37.5157889
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "48",
+			"name": "GS25",
+			"loc_coord": [
+				127.1513901,
+				37.5003738
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "49",
+			"name": "GS25",
+			"loc_coord": [
+				127.1245881,
+				37.485485
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "50",
+			"name": "GS25",
+			"loc_coord": [
+				127.1152573,
+				37.514265
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "51",
+			"name": "GS25",
+			"loc_coord": [
+				127.1079861,
+				37.5142752
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "52",
+			"name": "GS25",
+			"loc_coord": [
+				127.1090031,
+				37.5148048
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "53",
+			"name": "GS25",
+			"loc_coord": [
+				127.1082593,
+				37.5156612
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "54",
+			"name": "GS25",
+			"loc_coord": [
+				127.122408,
+				37.4950503
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "55",
+			"name": "GS25",
+			"loc_coord": [
+				127.0968724,
+				37.5044097
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "56",
+			"name": "GS25",
+			"loc_coord": [
+				127.1128078,
+				37.5155108
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "57",
+			"name": "GS25",
+			"loc_coord": [
+				127.083067,
+				37.5096416
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "58",
+			"name": "GS25",
+			"loc_coord": [
+				127.0790139,
+				37.5105075
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "59",
+			"name": "GS25",
+			"loc_coord": [
+				127.1103192,
+				37.5152759
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "60",
+			"name": "GS25",
+			"loc_coord": [
+				127.106617,
+				37.5009936
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "61",
+			"name": "GS25",
+			"loc_coord": [
+				127.1051286,
+				37.5069464
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "62",
+			"name": "GS25",
+			"loc_coord": [
+				127.1011792,
+				37.5055274
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "63",
+			"name": "GS25",
+			"loc_coord": [
+				127.103819,
+				37.5064258
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "64",
+			"name": "GS25",
+			"loc_coord": [
+				127.1081128,
+				37.5069517
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "65",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1178609,
+				37.5099429
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "66",
+			"name": "GS25",
+			"loc_coord": [
+				127.1110268,
+				37.5089149
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "67",
+			"name": "CU",
+			"loc_coord": [
+				127.1217042,
+				37.495016
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "68",
+			"name": "CU",
+			"loc_coord": [
+				127.1350899,
+				37.4975986
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "69",
+			"name": "CU",
+			"loc_coord": [
+				127.1254197,
+				37.4963168
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "70",
+			"name": "CU",
+			"loc_coord": [
+				127.12216,
+				37.4887103
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "71",
+			"name": "CU",
+			"loc_coord": [
+				127.124981,
+				37.5167407
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "72",
+			"name": "CU",
+			"loc_coord": [
+				127.0965119,
+				37.5002441
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "73",
+			"name": "CU",
+			"loc_coord": [
+				127.1044108,
+				37.5000333
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "74",
+			"name": "CU",
+			"loc_coord": [
+				127.0985833,
+				37.5038108
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "75",
+			"name": "CU",
+			"loc_coord": [
+				127.104519,
+				37.517971
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "76",
+			"name": "CU",
+			"loc_coord": [
+				127.1130086,
+				37.5186214
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "77",
+			"name": "CU",
+			"loc_coord": [
+				127.102467,
+				37.5151144
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "78",
+			"name": "CU",
+			"loc_coord": [
+				127.1367207,
+				37.5000838
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "79",
+			"name": "CU",
+			"loc_coord": [
+				127.1347342,
+				37.5045252
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "80",
+			"name": "CU",
+			"loc_coord": [
+				127.0851136,
+				37.5049056
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "81",
+			"name": "CU",
+			"loc_coord": [
+				127.0938111,
+				37.5115356
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "82",
+			"name": "CU",
+			"loc_coord": [
+				127.1503812,
+				37.4950713
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "83",
+			"name": "CU",
+			"loc_coord": [
+				127.1268368,
+				37.5014209
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "84",
+			"name": "CU",
+			"loc_coord": [
+				127.1006923,
+				37.5173054
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "85",
+			"name": "CU",
+			"loc_coord": [
+				127.0892602,
+				37.5061931
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "86",
+			"name": "CU",
+			"loc_coord": [
+				127.0803433,
+				37.5105933
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "87",
+			"name": "CU",
+			"loc_coord": [
+				127.1169835,
+				37.4983386
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "88",
+			"name": "CU",
+			"loc_coord": [
+				127.1346589,
+				37.4929561
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "89",
+			"name": "CU",
+			"loc_coord": [
+				127.1208726,
+				37.5358638
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "90",
+			"name": "CU",
+			"loc_coord": [
+				127.0804158,
+				37.5114307
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "91",
+			"name": "CU",
+			"loc_coord": [
+				127.0806904,
+				37.5093211
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "92",
+			"name": "CU",
+			"loc_coord": [
+				127.1245118,
+				37.486309
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "93",
+			"name": "CU",
+			"loc_coord": [
+				127.1198102,
+				37.5124568
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "94",
+			"name": "CU",
+			"loc_coord": [
+				127.1220627,
+				37.5073318
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "95",
+			"name": "CU",
+			"loc_coord": [
+				127.1254101,
+				37.5106792
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "96",
+			"name": "CU",
+			"loc_coord": [
+				127.1146546,
+				37.5147857
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "97",
+			"name": "CU",
+			"loc_coord": [
+				127.1118226,
+				37.5168915
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "98",
+			"name": "CU",
+			"loc_coord": [
+				127.1087533,
+				37.5148296
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "99",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1210004,
+				37.5062923
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "100",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.0892335,
+				37.5029468
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "101",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.127678,
+				37.5094947
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "102",
+			"name": "GS25",
+			"loc_coord": [
+				127.1127314,
+				37.5122127
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "103",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1045533,
+				37.501583
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "104",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.124918,
+				37.4927367
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "105",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1262932,
+				37.5008468
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "106",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1273518,
+				37.5044974
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "107",
+			"name": "CU",
+			"loc_coord": [
+				127.1212693,
+				37.4982604
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "108",
+			"name": "CU",
+			"loc_coord": [
+				127.1300526,
+				37.4866428
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "109",
+			"name": "CU",
+			"loc_coord": [
+				127.1319466,
+				37.4883632
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "110",
+			"name": "GS25",
+			"loc_coord": [
+				127.1115571,
+				37.5112132
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "111",
+			"name": "GS25",
+			"loc_coord": [
+				127.0954915,
+				37.5032176
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "112",
+			"name": "GS25",
+			"loc_coord": [
+				127.1185532,
+				37.5378551
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "113",
+			"name": "GS25",
+			"loc_coord": [
+				127.118744,
+				37.5318851
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "114",
+			"name": "GS25",
+			"loc_coord": [
+				127.1318074,
+				37.485815
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "115",
+			"name": "GS25",
+			"loc_coord": [
+				127.1460496,
+				37.4981479
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "116",
+			"name": "GS25",
+			"loc_coord": [
+				127.134194,
+				37.5064747
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "117",
+			"name": "CU",
+			"loc_coord": [
+				127.1245785,
+				37.5093707
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "118",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.112629,
+				37.5031261
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "119",
+			"name": "GS25",
+			"loc_coord": [
+				127.1215058,
+				37.5120353
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "120",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1200009,
+				37.4935645
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "121",
+			"name": "퍼스트편의점",
+			"loc_coord": [
+				127.0810033,
+				37.510498
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "122",
+			"name": "GS25",
+			"loc_coord": [
+				127.1338006,
+				37.5021361
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "123",
+			"name": "GS25",
+			"loc_coord": [
+				127.119224,
+				37.4945397
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "124",
+			"name": "대우편의점",
+			"loc_coord": [
+				127.1074372,
+				37.5153846
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "125",
+			"name": "해피스페이스",
+			"loc_coord": [
+				127.1096198,
+				37.5161155
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "126",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1227952,
+				37.5129527
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "127",
+			"name": "IGA마트",
+			"loc_coord": [
+				127.1161957,
+				37.5072726
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "128",
+			"name": "GS25",
+			"loc_coord": [
+				127.1475239,
+				37.4934749
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "129",
+			"name": "편의점이야기",
+			"loc_coord": [
+				127.1168862,
+				37.5027084
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "130",
+			"name": "CU",
+			"loc_coord": [
+				127.1089326,
+				37.5037536
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "131",
+			"name": "CU",
+			"loc_coord": [
+				127.1082574,
+				37.5034865
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "132",
+			"name": "토마토24",
+			"loc_coord": [
+				127.1058293,
+				37.5071849
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "133",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.0970002,
+				37.5000724
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "134",
+			"name": "베스트올",
+			"loc_coord": [
+				127.1210976,
+				37.4984664
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "135",
+			"name": "GS25",
+			"loc_coord": [
+				127.1131516,
+				37.5304202
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "136",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.0901185,
+				37.5072574
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "137",
+			"name": "GS25",
+			"loc_coord": [
+				127.1068201,
+				37.5084034
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "138",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1346245,
+				37.4950961
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "139",
+			"name": "GS25",
+			"loc_coord": [
+				127.1306229,
+				37.4844245
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "140",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1445084,
+				37.4919566
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "141",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1093961,
+				37.5015804
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "142",
+			"name": "삼원스토어",
+			"loc_coord": [
+				127.1006165,
+				37.4988574
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "143",
+			"name": "애니타임25",
+			"loc_coord": [
+				127.1176491,
+				37.5027427
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "144",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1164361,
+				37.4915752
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "145",
+			"name": "세븐스타스",
+			"loc_coord": [
+				127.1136151,
+				37.4865188
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "146",
+			"name": "GS25",
+			"loc_coord": [
+				127.094595,
+				37.4996699
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "147",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1309472,
+				37.5101184
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "148",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.095255,
+				37.5016631
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "149",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.112135,
+				37.5176105
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "150",
+			"name": "아이지에이마트",
+			"loc_coord": [
+				127.1044655,
+				37.520893
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "151",
+			"name": "GS25",
+			"loc_coord": [
+				127.0815259,
+				37.5083713
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "152",
+			"name": "홈런매점",
+			"loc_coord": [
+				127.07267,
+				37.5121974
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "153",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.107195,
+				37.5057143
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "154",
+			"name": "GS25",
+			"loc_coord": [
+				127.0921117,
+				37.5028781
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "155",
+			"name": "GS25",
+			"loc_coord": [
+				127.0791608,
+				37.5115451
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "156",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.0810013,
+				37.5058822
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "157",
+			"name": "GS25",
+			"loc_coord": [
+				127.1083203,
+				37.5015449
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "158",
+			"name": "CU",
+			"loc_coord": [
+				127.0924684,
+				37.5070171
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "159",
+			"name": "GS25",
+			"loc_coord": [
+				127.125063,
+				37.4888534
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "160",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.112587,
+				37.4999751
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "161",
+			"name": "CU",
+			"loc_coord": [
+				127.0985909,
+				37.5023059
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "162",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1137792,
+				37.5117977
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "163",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1197301,
+				37.4971999
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "164",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1141091,
+				37.5095042
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "165",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1124287,
+				37.500555
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "166",
+			"name": "GS25",
+			"loc_coord": [
+				127.1055012,
+				37.5183601
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "167",
+			"name": "CU",
+			"loc_coord": [
+				127.1451398,
+				37.4999656
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "168",
+			"name": "GS25",
+			"loc_coord": [
+				127.1158677,
+				37.5345153
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "169",
+			"name": "GS25",
+			"loc_coord": [
+				127.087803,
+				37.5075683
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "170",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.0887585,
+				37.5063228
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "171",
+			"name": "CU",
+			"loc_coord": [
+				127.0866089,
+				37.5055484
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "172",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1475335,
+				37.4924811
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "173",
+			"name": "GS25",
+			"loc_coord": [
+				127.1434041,
+				37.4970664
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "174",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.141985,
+				37.4979533
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "175",
+			"name": "GS25",
+			"loc_coord": [
+				127.1263467,
+				37.5117072
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "176",
+			"name": "CU",
+			"loc_coord": [
+				127.1572381,
+				37.4903449
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "177",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1116772,
+				37.5073299
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "178",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1179508,
+				37.5134408
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "179",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1055604,
+				37.5157012
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "180",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.0872136,
+				37.5063609
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "181",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.082409,
+				37.5095958
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "182",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.0878895,
+				37.5047282
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "183",
+			"name": "GS25",
+			"loc_coord": [
+				127.0884267,
+				37.5018252
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "184",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1202775,
+				37.5110473
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "185",
+			"name": "CU",
+			"loc_coord": [
+				127.1239987,
+				37.4883498
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "186",
+			"name": "세븐일레븐",
+			"loc_coord": [
+				127.1226178,
+				37.4873942
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "187",
+			"name": "CJ올리브영",
+			"loc_coord": [
+				127.1004964,
+				37.514387
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "188",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1194249,
+				37.4937209
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "189",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1044312,
+				37.5056438
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "190",
+			"name": "미니스톱",
+			"loc_coord": [
+				127.1170159,
+				37.5344161
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "191",
+			"name": "GS25",
+			"loc_coord": [
+				127.1168671,
+				37.5122451
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "192",
+			"name": "GS25",
+			"loc_coord": [
+				127.0913945,
+				37.506525
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "193",
+			"name": "GS25",
+			"loc_coord": [
+				127.1079808,
+				37.5136298
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "194",
+			"name": "CU",
+			"loc_coord": [
+				127.106556,
+				37.5066718
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "195",
+			"name": "CU",
+			"loc_coord": [
+				127.1124192,
+				37.5024222
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "196",
+			"name": "CU",
+			"loc_coord": [
+				127.087534,
+				37.5119266
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "197",
+			"name": "CU",
+			"loc_coord": [
+				127.086197,
+				37.5039958
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "198",
+			"name": "CU",
+			"loc_coord": [
+				127.1462079,
+				37.4888229
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "199",
+			"name": "CU",
+			"loc_coord": [
+				127.1450902,
+				37.4935321
+			],
+			"service_time": 60
+		},
+		{
+			"task_id": "200",
+			"name": "CU",
+			"loc_coord": [
+				127.1019917,
+				37.5172347
+			],
+			"service_time": 60
+		}
+	]
+}

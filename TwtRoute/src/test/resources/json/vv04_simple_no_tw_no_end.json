@@ -1,0 +1,43 @@
+{
+    "protocol_ver": "0.1.7",
+    "options": {
+        "service_time": 60,
+        "req_route_geom": false,
+        "req_debuginfo": true,
+        "keep_entry_angle": false
+    },
+    "vehicle": {
+        "driver_id": "hong",
+        "vehicle_id": "car-0101",
+        "start_task_id": "0",
+        "start_time": 32400,
+        "end_time": 64800
+    },
+    "services": [
+        {
+            "task_id": "0",
+            "name": "mappers",
+            "loc_coord": [ 127.1145019, 37.50868 ]
+        },
+        {
+            "task_id": "1",
+            "name": "송파나루역",
+            "loc_coord": [ 127.1121007 ,37.5098758 ]
+        },
+        {
+            "task_id": "2",
+            "name": "석촌역",
+            "loc_coord": [ 127.1078362 ,37.5053189 ]
+        },
+        {
+            "task_id": "3",
+            "name": "송파역",
+            "loc_coord": [127.1128161 ,37.4993756]
+        },
+        {
+            "task_id": "4",
+            "name": "spo-any",
+            "loc_coord": [ 127.1162522, 37.5078703 ]
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>TwtRoute frontend</title>
+        <link rel="stylesheet" href='css/index.css'>
+        <script src="http://apis.atlan.co.kr/maps/map.js?key=138550170316468cab6fd8f2b689fe3faec9c18ebd"></script>
+        <script src='js/util.js'></script>
+    </head>
+
+    <body>
+        <div id='control_div'>
+            <div id='aaa'>
+                <label for='tsptw'>Choose request JSON</label>
+                <input type="file" id="fileInputTSPTW" name="tsptw" accept=".json">
+                <label for='tsptwText'>Choose request TEXT for converting</label>
+                <input type='file' id='fileInputText' name='tsptwText' accept=".txt">
+                <input type='button' id='btnClear' value='Clear'/>
+                <input type='button' id='btnAnimation' value='Animation start' onclick="alert('oops');"/>
+            </div>
+            <div id='download_div'>
+                <br>
+                <label for="shpCreate">Shapefile 생성 여부</label>
+                <input type='checkbox' name='shpCreate' id='shpCreateCheckBox'/>
+                <br><br>
+                <label for="shpAutoSave">Shapefile auto save</label>
+                <input type='checkbox' name='shpAutoSave' id='shpAutoSaveCheckBox'>
+                <br><br>
+                <input type='button' id='btnDwnShp' value='Download currnet shape'/>
+                <h3>osrm route request</h3>
+                <input type="text" name="text1" id="txtCoords">
+            </div>
+
+        </div>
+        <div id="map_div"></div>
+
+        <script src='js/core.js'></script>
+        <script src='js/htmlcontrol.js'></script>
+    </body>
+</html>

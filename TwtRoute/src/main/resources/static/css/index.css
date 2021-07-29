@@ -1,0 +1,14 @@
+*{margin: 0; padding: 0;}
+
+#map_div {
+    width: 85%; 
+    height: 100%;
+    float: right;
+}
+
+#control_div {
+    width: 15%;
+    height: 100%;
+    float: left;
+    opacity: 1.0;
+}
